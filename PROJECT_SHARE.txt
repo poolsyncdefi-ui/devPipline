@@ -3,12 +3,12 @@ STRUCTURED LENDING PROTOCOL - FULL PROJECT SHARE
 ============================================================================== 
 GitHub: poolsyncdefi-ui/structured-lending-protocol-clean 
 Repo URL: https://github.com/poolsyncdefi-ui/structured-lending-protocol-clean 
-Date: 10/01/2026 Time: 13:48:04,47 
+Date: 10/01/2026 Time: 15:29:11,23 
  
 [GIT INFORMATION] 
 ------------------------------------------------------------------------------ 
 Branch: main 
-Commit: 3b176dc 
+Commit: 3161deb 
  
 [CONTRACTS DIRECTORY - *.sol files] 
 ============================================================================== 
@@ -40,8 +40,396 @@ Size: !filesize! bytes | Modified: !filemodified!
 22: } 
 ------------------------------------------------------------------------------ 
  
+FILE 0 | !filepath! 
+Size: !filesize! bytes | Modified: !filemodified! 
+------------------------------------------------------------------------------ 
+1: // SPDX-License-Identifier: MIT 
+2: pragma solidity 0.8.20; 
+3: import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; 
+4: import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"; 
+5: import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"; 
+6: import "@openzeppelin/contracts/access/Ownable.sol"; 
+7: import "@openzeppelin/contracts/utils/Counters.sol"; 
+8: /** 
+9:  * @title SimpleNFT 
+10:  * @dev Un contrat NFT simple avec mint, burn et gestion des metadata 
+11:  * @notice Ce contrat sert de base pour le pipeline IA Web3 
+12:  */ 
+13: contract SimpleNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable { 
+14:     using Counters for Counters.Counter; 
+15:      
+16:     Counters.Counter private _tokenIdCounter; 
+17:      
+18:     // Événements 
+19:     event NFTMinted(address indexed to, uint256 indexed tokenId, string tokenURI); 
+20:     event NFTBurned(address indexed owner, uint256 indexed tokenId); 
+21:     event BaseURIUpdated(string newBaseURI); 
+22:      
+23:     // Variables d'état 
+24:     string private _baseTokenURI; 
+25:     uint256 public constant MAX_SUPPLY = 10000; 
+26:     uint256 public mintPrice = 0.01 ether; 
+27:      
+28:     /** 
+29:      * @dev Initialise le contrat avec un nom, symbole et baseURI 
+30:      * @param name Nom du NFT 
+31:      * @param symbol Symbole du NFT 
+32:      * @param baseURI URI de base pour les metadata 
+33:      */ 
+34:     constructor( 
+35:         string memory name, 
+36:         string memory symbol, 
+37:         string memory baseURI 
+38:     ) ERC721(name, symbol) Ownable(msg.sender) { 
+39:         _baseTokenURI = baseURI; 
+40:     } 
+41:      
+42:     /** 
+43:      * @dev Mint un nouveau NFT 
+44:      * @param to Adresse recevant le NFT 
+45:      * @param tokenURI URI des metadata du token 
+46:      */ 
+47:     function safeMint(address to, string memory tokenURI)  
+48:         public  
+49:         payable  
+50:         returns (uint256)  
+51:     { 
+52:         require(msg.value >= mintPrice, "Insufficient payment"); 
+53:         require(totalSupply() < MAX_SUPPLY, "Max supply reached"); 
+54:          
+55:         uint256 tokenId = _tokenIdCounter.current(); 
+56:         _tokenIdCounter.increment(); 
+57:          
+58:         _safeMint(to, tokenId); 
+59:         _setTokenURI(tokenId, tokenURI); 
+60:          
+61:         // Rembourser l'excédent 
+62:         if (msg.value > mintPrice) { 
+63:             payable(msg.sender).transfer(msg.value - mintPrice); 
+64:         } 
+65:          
+66:         emit NFTMinted(to, tokenId, tokenURI); 
+67:         return tokenId; 
+68:     } 
+69:      
+70:     /** 
+71:      * @dev Mint par le owner (gratuit) 
+72:      */ 
+73:     function ownerMint(address to, string memory tokenURI)  
+74:         public  
+75:         onlyOwner  
+76:         returns (uint256)  
+77:     { 
+78:         require(totalSupply() < MAX_SUPPLY, "Max supply reached"); 
+79:          
+80:         uint256 tokenId = _tokenIdCounter.current(); 
+81:         _tokenIdCounter.increment(); 
+82:          
+83:         _safeMint(to, tokenId); 
+84:         _setTokenURI(tokenId, tokenURI); 
+85:          
+86:         emit NFTMinted(to, tokenId, tokenURI); 
+87:         return tokenId; 
+88:     } 
+89:      
+90:     /** 
+91:      * @dev Brûler un NFT 
+92:      * @param tokenId ID du token à brûler 
+93:      */ 
+94:     function burn(uint256 tokenId) public { 
+95:         require(_isApprovedOrOwner(_msgSender(), tokenId), "Not owner nor approved"); 
+96:         _burn(tokenId); 
+97:          
+98:         emit NFTBurned(msg.sender, tokenId); 
+99:     } 
+100:      
+101:     /** 
+102:      * @dev Mettre à jour le prix de mint 
+103:      */ 
+104:     function setMintPrice(uint256 newPrice) public onlyOwner { 
+105:         mintPrice = newPrice; 
+106:     } 
+107:      
+108:     /** 
+109:      * @dev Mettre à jour la baseURI 
+110:      */ 
+111:     function setBaseURI(string memory newBaseURI) public onlyOwner { 
+112:         _baseTokenURI = newBaseURI; 
+113:         emit BaseURIUpdated(newBaseURI); 
+114:     } 
+115:      
+116:     /** 
+117:      * @dev Retirer les fonds du contrat 
+118:      */ 
+119:     function withdraw() public onlyOwner { 
+120:         uint256 balance = address(this).balance; 
+121:         require(balance > 0, "No balance to withdraw"); 
+122:          
+123:         payable(owner()).transfer(balance); 
+124:     } 
+125:      
+126:     // ====================== 
+127:     // Overrides nécessaires 
+128:     // ====================== 
+129:      
+130:     function _baseURI() internal view override returns (string memory) { 
+131:         return _baseTokenURI; 
+132:     } 
+133:      
+134:     function _update(address to, uint256 tokenId, address auth) 
+135:         internal 
+136:         override(ERC721, ERC721Enumerable) 
+137:         returns (address) 
+138:     { 
+139:         return super._update(to, tokenId, auth); 
+140:     } 
+141:      
+142:     function _increaseBalance(address account, uint128 value) 
+143:         internal 
+144:         override(ERC721, ERC721Enumerable) 
+145:     { 
+146:         super._increaseBalance(account, value); 
+147:     } 
+148:      
+149:     function tokenURI(uint256 tokenId) 
+150:         public 
+151:         view 
+152:         override(ERC721, ERC721URIStorage) 
+153:         returns (string memory) 
+154:     { 
+155:         return super.tokenURI(tokenId); 
+156:     } 
+157:      
+158:     function supportsInterface(bytes4 interfaceId) 
+159:         public 
+160:         view 
+161:         override(ERC721, ERC721Enumerable, ERC721URIStorage) 
+162:         returns (bool) 
+163:     { 
+164:         return super.supportsInterface(interfaceId); 
+165:     } 
+166:      
+167:     // ====================== 
+168:     // Getters 
+169:     // ====================== 
+170:      
+171:     /** 
+172:      * @dev Voir le prochain tokenId disponible 
+173:      */ 
+174:     function nextTokenId() public view returns (uint256) { 
+175:         return _tokenIdCounter.current(); 
+176:     } 
+177:      
+178:     /** 
+179:      * @dev Voir la baseURI actuelle 
+180:      */ 
+181:     function baseURI() public view returns (string memory) { 
+182:         return _baseTokenURI; 
+183:     } 
+184:      
+185:     /** 
+186:      * @dev Voir le nombre total minté 
+187:      */ 
+188:     function totalMinted() public view returns (uint256) { 
+189:         return _tokenIdCounter.current(); 
+190:     } 
+191: } 
+------------------------------------------------------------------------------ 
+ 
 [SCRIPTS DIRECTORY - *.js, *.bat, *.sh, *.txt files] 
 ============================================================================== 
+ 
+SCRIPT !script_count! | !filepath! 
+Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
+------------------------------------------------------------------------------ 
+1: const hre = require("hardhat"); 
+2: async function main() { 
+3:   console.log("🚀 Déploiement du contrat SimpleNFT (Hardhat v2)..."); 
+4:    
+5:   // Récupérer le contrat - syntaxe v2 
+6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
+7:    
+8:   // Déployer avec paramètres 
+9:   const simpleNFT = await SimpleNFT.deploy( 
+10:     "Simple NFT", 
+11:     "SNFT", 
+12:     "https://api.nftmarketplace.com/metadata/" 
+13:   ); 
+14:    
+15:   // Attendre le déploiement - syntaxe v2 
+16:   await simpleNFT.deployed(); 
+17:    
+18:   console.log(`✅ SimpleNFT déployé à: ${simpleNFT.address}`); 
+19:   console.log(`   • Name: ${await simpleNFT.name()}`); 
+20:   console.log(`   • Symbol: ${await simpleNFT.symbol()}`); 
+21:    
+22:   return simpleNFT.address; 
+23: } 
+24: // Exécuter directement 
+25: main() 
+26:   .then(() => process.exit(0)) 
+27:   .catch((error) => { 
+28:     console.error(error); 
+29:     process.exit(1); 
+30:   }); 
+------------------------------------------------------------------------------ 
+ 
+SCRIPT !script_count! | !filepath! 
+Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
+------------------------------------------------------------------------------ 
+1: const hre = require("hardhat"); 
+2: async function main() { 
+3:   console.log("🚀 Déploiement du contrat SimpleNFT..."); 
+4:    
+5:   // Récupérer le contrat 
+6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
+7:    
+8:   // Déployer avec paramètres 
+9:   const simpleNFT = await SimpleNFT.deploy( 
+10:     "Simple NFT",          // name 
+11:     "SNFT",                // symbol 
+12:     "https://api.nftmarketplace.com/metadata/"  // baseURI 
+13:   ); 
+14:    
+15:   // Attendre le déploiement 
+16:   await simpleNFT.waitForDeployment(); 
+17:    
+18:   // Adresse du contrat déployé 
+19:   const address = await simpleNFT.getAddress(); 
+20:   console.log(`✅ SimpleNFT déployé à: ${address}`); 
+21:    
+22:   // Informations supplémentaires 
+23:   console.log(`   • Name: ${await simpleNFT.name()}`); 
+24:   console.log(`   • Symbol: ${await simpleNFT.symbol()}`); 
+25:   console.log(`   • Base URI: ${await simpleNFT.baseURI()}`); 
+26:   console.log(`   • Owner: ${await simpleNFT.owner()}`); 
+27:    
+28:   // Vérification sur Etherscan (UNIQUEMENT pour les réseaux réels) 
+29:   if (hre.network.name == "hardhat") { 
+30:     console.log(`\n🔍 Vérification sur Etherscan (${hre.network.name})...`); 
+31:      
+32:     // Attendre quelques blocs pour que la transaction soit indexée 
+33:     console.log("   Attente de 30 secondes pour l'indexation..."); 
+34:     await new Promise(resolve => setTimeout(resolve, 30000)); 
+35:      
+36:     try { 
+37:       await hre.run("verify:verify", { 
+38:         address: address, 
+39:         constructorArguments: [ 
+40:           "Simple NFT", 
+41:           "SNFT", 
+42:           "https://api.nftmarketplace.com/metadata/" 
+43:         ] 
+44:       }); 
+45:       console.log("✅ Contrat vérifié sur Etherscan"); 
+46:     } catch (error) { 
+47:       if (error.message.includes("Already Verified")) { 
+48:         console.log("✅ Contrat déjà vérifié"); 
+49:       } else { 
+50:         console.log("⚠️  Échec vérification:", error.message); 
+51:       } 
+52:     } 
+53:   } 
+54:    
+55:   return address; 
+56: } 
+57: // Fonction pour déployer sur différents réseaux 
+58: async function deployToNetwork(networkName) { 
+59:   console.log(`\n🌐 Déploiement sur ${networkName}...`); 
+60:    
+61:   // Sauvegarder le réseau actuel 
+62:   const originalNetwork = hre.network.name; 
+63:    
+64:   try { 
+65:     // Changer de réseau 
+66:     hre.changeNetwork(networkName); 
+67:      
+68:     // Déployer 
+69:     const address = await main(); 
+70:      
+71:     // Sauvegarder l'adresse dans un fichier 
+72:     const fs = require("fs"); 
+73:     const deploymentsDir = "./deployments"; 
+74:      
+75:     // CORRECTION : Créer le dossier seulement s'il n'existe pas 
+76:     if (fs.existsSync(deploymentsDir)) { 
+77:       fs.mkdirSync(deploymentsDir, { recursive: true }); 
+78:     } 
+79:      
+80:     const deploymentInfo = { 
+81:       network: networkName, 
+82:       contract: "SimpleNFT", 
+83:       address: address, 
+84:       timestamp: new Date().toISOString(), 
+85:       deployer: (await hre.ethers.getSigners())[0].address 
+86:     }; 
+87:      
+88:     fs.writeFileSync( 
+89:       `${deploymentsDir}/${networkName}.json`, 
+90:       JSON.stringify(deploymentInfo, null, 2) 
+91:     ); 
+92:      
+93:     console.log(`💾 Informations sauvegardées: deployments/${networkName}.json`); 
+94:      
+95:     return address; 
+96:      
+97:   } catch (error) { 
+98:     console.error(`❌ Erreur déploiement sur ${networkName}:`, error.message); 
+99:     throw error; 
+100:   } finally { 
+101:     // Restaurer le réseau original 
+102:     hre.changeNetwork(originalNetwork); 
+103:   } 
+104: } 
+105: // Script principal 
+106: async function runDeployments() { 
+107:   console.log("=".repeat(60)); 
+108:   console.log("        SCRIPT DE DÉPLOIEMENT NFT MARKETPLACE"); 
+109:   console.log("=".repeat(60)); 
+110:    
+111:   const args = process.argv.slice(2); 
+112:   const network = args[0] || "hardhat"; 
+113:    
+114:   try { 
+115:     if (network === "all") { 
+116:       // Déployer sur tous les réseaux configurés 
+117:       const networks = ["hardhat", "sepolia", "mumbai"]; 
+118:        
+119:       for (const net of networks) { 
+120:         try { 
+121:           await deployToNetwork(net); 
+122:         } catch (error) { 
+123:           console.log(`⚠️  Skip ${net} due to error: ${error.message}`); 
+124:         } 
+125:       } 
+126:        
+127:     } else { 
+128:       // Déployer sur un réseau spécifique 
+129:       await deployToNetwork(network); 
+130:     } 
+131:      
+132:     console.log("\n🎉 Déploiement terminé avec succès"); 
+133:      
+134:   } catch (error) { 
+135:     console.error("\n❌ Erreur pendant le déploiement:", error); 
+136:     process.exit(1); 
+137:   } 
+138: } 
+139: // Exécuter si appelé directement 
+140: if (require.main === module) { 
+141:   runDeployments() 
+142:     .then(() => process.exit(0)) 
+143:     .catch((error) => { 
+144:       console.error(error); 
+145:       process.exit(1); 
+146:     }); 
+147: } 
+148: // Exporter pour usage dans d'autres scripts 
+149: module.exports = { 
+150:   main, 
+151:   deployToNetwork 
+152: }; 
+------------------------------------------------------------------------------ 
  
 SCRIPT !script_count! | !filepath! 
 Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
@@ -1001,9 +1389,13 @@ Listing all project files...
  
 CONTRACTS: 
 D:\Web3Projects\NFTMarketplace\contracts\Lock.sol
+D:\Web3Projects\NFTMarketplace\contracts\SimpleNFT.sol
  
 SCRIPTS: 
 D:\Web3Projects\NFTMarketplace\scripts\Activate.ps1
+D:\Web3Projects\NFTMarketplace\scripts\check_env.py
+D:\Web3Projects\NFTMarketplace\scripts\deploy-simple.js
+D:\Web3Projects\NFTMarketplace\scripts\deploy.js
 D:\Web3Projects\NFTMarketplace\scripts\venv
 D:\Web3Projects\NFTMarketplace\scripts\venv\Include
 D:\Web3Projects\NFTMarketplace\scripts\venv\Lib
@@ -2684,77 +3076,97 @@ D:\Web3Projects\NFTMarketplace\scripts\venv\Scripts\python.exe
 D:\Web3Projects\NFTMarketplace\scripts\venv\Scripts\pythonw.exe
  
 TESTS: 
-D:\Web3Projects\NFTMarketplace\node_modules\@solidity-parser\parser\dist\test
-D:\Web3Projects\NFTMarketplace\node_modules\@streamparser\json\test
-D:\Web3Projects\NFTMarketplace\node_modules\@streamparser\json-node\test
+D:\Web3Projects\NFTMarketplace\node_modules\@ensdomains\resolver\test
 D:\Web3Projects\NFTMarketplace\node_modules\@types\node\test
+D:\Web3Projects\NFTMarketplace\node_modules\abstract-level\test
+D:\Web3Projects\NFTMarketplace\node_modules\abstract-leveldown\test
+D:\Web3Projects\NFTMarketplace\node_modules\abstract-leveldown\node_modules\level-supports\test
+D:\Web3Projects\NFTMarketplace\node_modules\aes-js\test
+D:\Web3Projects\NFTMarketplace\node_modules\async-eventemitter\test
 D:\Web3Projects\NFTMarketplace\node_modules\available-typed-arrays\test
 D:\Web3Projects\NFTMarketplace\node_modules\brorand\test
-D:\Web3Projects\NFTMarketplace\node_modules\buffer-xor\test
+D:\Web3Projects\NFTMarketplace\node_modules\browserify-aes\node_modules\buffer-xor\test
 D:\Web3Projects\NFTMarketplace\node_modules\call-bind\test
 D:\Web3Projects\NFTMarketplace\node_modules\call-bind-apply-helpers\test
 D:\Web3Projects\NFTMarketplace\node_modules\call-bound\test
 D:\Web3Projects\NFTMarketplace\node_modules\cipher-base\test
+D:\Web3Projects\NFTMarketplace\node_modules\command-exists\test
 D:\Web3Projects\NFTMarketplace\node_modules\concat-map\test
-D:\Web3Projects\NFTMarketplace\node_modules\death\test
-D:\Web3Projects\NFTMarketplace\node_modules\deep-is\test
+D:\Web3Projects\NFTMarketplace\node_modules\deferred-leveldown\node_modules\abstract-leveldown\test
+D:\Web3Projects\NFTMarketplace\node_modules\deferred-leveldown\node_modules\level-supports\test
 D:\Web3Projects\NFTMarketplace\node_modules\define-data-property\test
-D:\Web3Projects\NFTMarketplace\node_modules\difflib\test
 D:\Web3Projects\NFTMarketplace\node_modules\dunder-proto\test
+D:\Web3Projects\NFTMarketplace\node_modules\encoding-down\test
 D:\Web3Projects\NFTMarketplace\node_modules\es-define-property\test
 D:\Web3Projects\NFTMarketplace\node_modules\es-errors\test
 D:\Web3Projects\NFTMarketplace\node_modules\es-object-atoms\test
 D:\Web3Projects\NFTMarketplace\node_modules\es-set-tostringtag\test
+D:\Web3Projects\NFTMarketplace\node_modules\eth-ens-namehash\test
+D:\Web3Projects\NFTMarketplace\node_modules\ethereumjs-abi\test
 D:\Web3Projects\NFTMarketplace\node_modules\ethjs-unit\node_modules\bn.js\test
-D:\Web3Projects\NFTMarketplace\node_modules\fast-uri\test
-D:\Web3Projects\NFTMarketplace\node_modules\fastq\test
+D:\Web3Projects\NFTMarketplace\node_modules\fast-json-stable-stringify\test
 D:\Web3Projects\NFTMarketplace\node_modules\flat\test
 D:\Web3Projects\NFTMarketplace\node_modules\for-each\test
 D:\Web3Projects\NFTMarketplace\node_modules\function-bind\test
+D:\Web3Projects\NFTMarketplace\node_modules\functional-red-black-tree\test
+D:\Web3Projects\NFTMarketplace\node_modules\ganache\node_modules\brorand\test
+D:\Web3Projects\NFTMarketplace\node_modules\ganache\node_modules\hash.js\test
+D:\Web3Projects\NFTMarketplace\node_modules\ganache\node_modules\hmac-drbg\test
+D:\Web3Projects\NFTMarketplace\node_modules\ganache\node_modules\leveldown\node_modules\abstract-leveldown\test
+D:\Web3Projects\NFTMarketplace\node_modules\ganache\node_modules\leveldown\node_modules\level-supports\test
+D:\Web3Projects\NFTMarketplace\node_modules\ganache\node_modules\minimalistic-crypto-utils\test
 D:\Web3Projects\NFTMarketplace\node_modules\get-intrinsic\test
 D:\Web3Projects\NFTMarketplace\node_modules\get-proto\test
 D:\Web3Projects\NFTMarketplace\node_modules\gopd\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\dist\src\internal\builtin-plugins\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\src\internal\builtin-plugins\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\templates\hardhat-2\01-mocha-ethers-js\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\templates\hardhat-2\02-mocha-ethers-js-esm\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\templates\hardhat-2\03-mocha-ethers-ts\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\templates\hardhat-2\04-mocha-viem-ts\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\templates\hardhat-3\01-node-test-runner-viem\test
-D:\Web3Projects\NFTMarketplace\node_modules\hardhat\templates\hardhat-3\02-mocha-ethers\test
+D:\Web3Projects\NFTMarketplace\node_modules\hardhat\sample-projects\javascript\test
+D:\Web3Projects\NFTMarketplace\node_modules\hardhat\sample-projects\javascript-esm\test
+D:\Web3Projects\NFTMarketplace\node_modules\hardhat\sample-projects\typescript\test
+D:\Web3Projects\NFTMarketplace\node_modules\hardhat\sample-projects\typescript-viem\test
 D:\Web3Projects\NFTMarketplace\node_modules\has-property-descriptors\test
 D:\Web3Projects\NFTMarketplace\node_modules\has-symbols\test
 D:\Web3Projects\NFTMarketplace\node_modules\has-tostringtag\test
 D:\Web3Projects\NFTMarketplace\node_modules\hash.js\test
-D:\Web3Projects\NFTMarketplace\node_modules\heap\test
 D:\Web3Projects\NFTMarketplace\node_modules\hmac-drbg\test
+D:\Web3Projects\NFTMarketplace\node_modules\idna-uts46-hx\test
 D:\Web3Projects\NFTMarketplace\node_modules\is-callable\test
 D:\Web3Projects\NFTMarketplace\node_modules\is-typed-array\test
-D:\Web3Projects\NFTMarketplace\node_modules\isexe\test
+D:\Web3Projects\NFTMarketplace\node_modules\is-url\test
 D:\Web3Projects\NFTMarketplace\node_modules\json-stringify-safe\test
+D:\Web3Projects\NFTMarketplace\node_modules\level-codec\test
+D:\Web3Projects\NFTMarketplace\node_modules\level-supports\test
+D:\Web3Projects\NFTMarketplace\node_modules\levelup\node_modules\level-supports\test
 D:\Web3Projects\NFTMarketplace\node_modules\math-intrinsics\test
+D:\Web3Projects\NFTMarketplace\node_modules\mcl-wasm\test
+D:\Web3Projects\NFTMarketplace\node_modules\memdown\node_modules\abstract-leveldown\test
+D:\Web3Projects\NFTMarketplace\node_modules\memdown\node_modules\level-supports\test
+D:\Web3Projects\NFTMarketplace\node_modules\memorystream\test
+D:\Web3Projects\NFTMarketplace\node_modules\miller-rabin\test
 D:\Web3Projects\NFTMarketplace\node_modules\minimalistic-crypto-utils\test
 D:\Web3Projects\NFTMarketplace\node_modules\minimist\test
-D:\Web3Projects\NFTMarketplace\node_modules\ndjson\test
-D:\Web3Projects\NFTMarketplace\node_modules\node-emoji\test
-D:\Web3Projects\NFTMarketplace\node_modules\nopt\test
 D:\Web3Projects\NFTMarketplace\node_modules\number-to-bn\node_modules\bn.js\test
+D:\Web3Projects\NFTMarketplace\node_modules\object-inspect\test
 D:\Web3Projects\NFTMarketplace\node_modules\ordinal\test
+D:\Web3Projects\NFTMarketplace\node_modules\path-browserify\test
+D:\Web3Projects\NFTMarketplace\node_modules\performance-now\test
 D:\Web3Projects\NFTMarketplace\node_modules\possible-typed-array-names\test
+D:\Web3Projects\NFTMarketplace\node_modules\qs\test
 D:\Web3Projects\NFTMarketplace\node_modules\resolve\test
-D:\Web3Projects\NFTMarketplace\node_modules\rfdc\test
+D:\Web3Projects\NFTMarketplace\node_modules\setprototypeof\test
 D:\Web3Projects\NFTMarketplace\node_modules\sha.js\test
-D:\Web3Projects\NFTMarketplace\node_modules\source-map\test
-D:\Web3Projects\NFTMarketplace\node_modules\sprintf-js\test
+D:\Web3Projects\NFTMarketplace\node_modules\side-channel\test
+D:\Web3Projects\NFTMarketplace\node_modules\side-channel-list\test
+D:\Web3Projects\NFTMarketplace\node_modules\side-channel-map\test
+D:\Web3Projects\NFTMarketplace\node_modules\side-channel-weakmap\test
+D:\Web3Projects\NFTMarketplace\node_modules\tslib\test
+D:\Web3Projects\NFTMarketplace\node_modules\tsort\test
 D:\Web3Projects\NFTMarketplace\node_modules\typed-array-buffer\test
-D:\Web3Projects\NFTMarketplace\node_modules\viem\actions\test
-D:\Web3Projects\NFTMarketplace\node_modules\viem\_cjs\actions\test
-D:\Web3Projects\NFTMarketplace\node_modules\viem\_esm\actions\test
-D:\Web3Projects\NFTMarketplace\node_modules\viem\_types\actions\test
+D:\Web3Projects\NFTMarketplace\node_modules\url\test
+D:\Web3Projects\NFTMarketplace\node_modules\url\node_modules\qs\test
 D:\Web3Projects\NFTMarketplace\node_modules\which-typed-array\test
-D:\Web3Projects\NFTMarketplace\node_modules\wordwrap\test
 D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\adodbapi\test
 D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\isapi\test
+D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\joblib\test
+D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\nltk\test
 D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\win32\test
 D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\win32com\test
 D:\Web3Projects\NFTMarketplace\venv\Lib\site-packages\win32comext\axscript\test
@@ -2771,10 +3183,10 @@ package.json
  
 [SUMMARY] 
 ============================================================================== 
-Total contract files: 1 
-Total script files: 9 
+Total contract files: 2 
+Total script files: 11 
 Total test files: 0 
-Total code files: 10 
+Total code files: 13 
  
-Generated: 10/01/2026 13:48:05,69 
+Generated: 10/01/2026 15:29:12,76 
 ============================================================================== 
