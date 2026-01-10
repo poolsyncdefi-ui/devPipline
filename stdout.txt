@@ -1,0 +1,168 @@
+
+========================================
+  FINAL SHARE - BATCH ONLY
+========================================
+
+1. CREATE FULL SHARE (all files with line numbers)
+2. CREATE DIFF SHARE (changed files only)
+3. GIT COMMIT + PUSH
+4. EXIT
+
+Enter choice (1-4): 4
+(venv) PS D:\Web3Projects\NFTMarketplace> npm list hardhat
+nftmarketplace@1.0.0 D:\Web3Projects\NFTMarketplace
++-- @nomicfoundation/hardhat-toolbox@6.1.0
+| +-- @nomicfoundation/hardhat-chai-matchers@2.1.0
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers
+| +-- @nomicfoundation/hardhat-ethers@3.1.3
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers
+| +-- @nomicfoundation/hardhat-ignition-ethers@0.15.17
+| | +-- @nomicfoundation/hardhat-ignition@0.15.16
+| | | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-network-helpers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-verify, "^2.9.9" from node_modules/@typechain/hardhat, "^2.16.0" from node_modules/hardhat-gas-reporter, "^2.11.0" from node_modules/solidity-coverage, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers
+| +-- @nomicfoundation/hardhat-network-helpers@1.1.2
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-network-helpers
+| +-- @nomicfoundation/hardhat-verify@2.1.3
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-network-helpers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-verify
+| +-- @typechain/hardhat@9.1.0
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-network-helpers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-verify, "^2.9.9" from node_modules/@typechain/hardhat
+| +-- hardhat-gas-reporter@2.3.0
+| | `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-network-helpers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-verify, "^2.9.9" from node_modules/@typechain/hardhat, "^2.16.0" from node_modules/hardhat-gas-reporter
+| +-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox
+| `-- solidity-coverage@0.8.17
+|   `-- hardhat@3.1.3 deduped invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox, "^2.26.0" from node_modules/@nomicfoundation/hardhat-chai-matchers, "^2.28.0" from node_modules/@nomicfoundation/hardhat-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-ignition-ethers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-network-helpers, "^2.26.0" from node_modules/@nomicfoundation/hardhat-verify, "^2.9.9" from node_modules/@typechain/hardhat, "^2.16.0" from node_modules/hardhat-gas-reporter, "^2.11.0" from node_modules/solidity-coverage
+`-- hardhat@3.1.3 invalid: "^2.26.0" from node_modules/@nomicfoundation/hardhat-toolbox
+
+npm error code ELSPROBLEMS
+npm error invalid: hardhat@3.1.3 D:\Web3Projects\NFTMarketplace\node_modules\hardhat
+npm error A complete log of this run can be found in: C:\Users\elega\AppData\Local\npm-cache\_logs\2026-01-10T12_44_26_259Z-debug-0.log
+(venv) PS D:\Web3Projects\NFTMarketplace> Test-Path ".\node_modules\.bin\hardhat"
+True
+(venv) PS D:\Web3Projects\NFTMarketplace> .\node_modules\.bin\hardhat test
+
+WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
+Please upgrade to 22.10.0 or a later LTS version (even major version number)
+
+An unexpected error occurred:
+
+TypeError: Class extends value undefined is not a constructor or null
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\errors.ts:3:41)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\helpers.ts:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
+
+Unhandled promise rejection:
+
+TypeError: Class extends value undefined is not a constructor or null
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\errors.ts:3:41)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\helpers.ts:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+(venv) PS D:\Web3Projects\NFTMarketplace> npx hardhat test --show-stack-traces
+
+WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
+Please upgrade to 22.10.0 or a later LTS version (even major version number)
+
+An unexpected error occurred:
+
+TypeError: Class extends value undefined is not a constructor or null
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\errors.ts:3:41)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\helpers.ts:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
+
+Unhandled promise rejection:
+
+TypeError: Class extends value undefined is not a constructor or null
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\errors.ts:3:41)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\helpers.ts:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+(venv) PS D:\Web3Projects\NFTMarketplace>
+(venv) PS D:\Web3Projects\NFTMarketplace> New-Item -ItemType Directory -Path "tests" -Force
+
+    Directory: D:\Web3Projects\NFTMarketplace
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          09/01/2026    19:18                tests
+
+(venv) PS D:\Web3Projects\NFTMarketplace> @'
+>> const { expect } = require("chai");
+>>
+>> describe("Compilation test", function () {
+>>   it("Should compile successfully", async function () {
+>>     // Test simple pour vérifier que tout fonctionne
+>>     expect(1 + 1).to.equal(2);
+>>   });
+>>
+>>   it("Should have web3 available", async function () {
+>>     // Vérifier que web3 est disponible
+>>     const Web3 = require("web3");
+>>     const web3 = new Web3();
+>>     expect(web3).to.exist;
+>>   });
+>> });
+>> '@ | Out-File -FilePath "tests\basic.test.js" -Encoding UTF8
+(venv) PS D:\Web3Projects\NFTMarketplace> npx hardhat test tests/basic.test.js
+
+WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
+Please upgrade to 22.10.0 or a later LTS version (even major version number)
+
+An unexpected error occurred:
+
+TypeError: Class extends value undefined is not a constructor or null
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\errors.ts:3:41)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\helpers.ts:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
+
+Unhandled promise rejection:
+
+TypeError: Class extends value undefined is not a constructor or null
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\errors.ts:3:41)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
+    at Module.load (node:internal/modules/cjs/loader:1266:32)
+    at Module._load (node:internal/modules/cjs/loader:1091:12)
+    at Module.require (node:internal/modules/cjs/loader:1289:19)
+    at require (node:internal/modules/helpers:182:18)
+    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\node_modules\@nomicfoundation\hardhat-ethers\src\internal\helpers.ts:10:1)
+    at Module._compile (node:internal/modules/cjs/loader:1521:14)
+    at Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
