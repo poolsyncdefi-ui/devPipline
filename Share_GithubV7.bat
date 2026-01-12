@@ -32,8 +32,8 @@ rem Create header
 echo ============================================================================== > PROJECT_SHARE.txt
 echo STRUCTURED LENDING PROTOCOL - FULL PROJECT SHARE >> PROJECT_SHARE.txt
 echo ============================================================================== >> PROJECT_SHARE.txt
-echo GitHub: poolsyncdefi-ui/structured-lending-protocol-clean >> PROJECT_SHARE.txt
-echo Repo URL: https://github.com/poolsyncdefi-ui/structured-lending-protocol-clean >> PROJECT_SHARE.txt
+echo GitHub: poolsyncdefi-ui/devPipline >> PROJECT_SHARE.txt
+echo Repo URL: https://github.com/poolsyncdefi-ui/devPipline.git >> PROJECT_SHARE.txt
 echo Date: %date% Time: %time% >> PROJECT_SHARE.txt
 echo. >> PROJECT_SHARE.txt
 
@@ -305,7 +305,7 @@ goto menu
 
 :gitpush
 cls
-echo GitHub: https://github.com/poolsyncdefi-ui/structured-lending-protocol-clean
+echo GitHub: https://github.com/poolsyncdefi-ui/devPipline.git
 echo.
 set /p msg=Commit message: 
 if "%msg%"=="" set msg="Project update"
@@ -314,7 +314,7 @@ git add .
 git commit -m "%msg%"
 git push
 echo.
-echo Verify commit: https://github.com/poolsyncdefi-ui/structured-lending-protocol-clean/commits/main
+echo Verify commit: https://github.com/poolsyncdefi-ui/devPipline/commits/main
 echo.
 pause
 goto menu
