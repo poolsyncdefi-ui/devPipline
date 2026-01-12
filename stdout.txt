@@ -1,150 +1,25 @@
-(venv) PS D:\Web3Projects\NFTMarketplace> npm uninstall hardhat @nomicfoundation/hardhat-toolbox
 
-removed 544 packages, and audited 2 packages in 11s
+========================================
+  FINAL SHARE - BATCH ONLY
+========================================
 
-found 0 vulnerabilities
-(venv) PS D:\Web3Projects\NFTMarketplace> npm install --save-dev hardhat@^2.19.0 @nomiclabs/hardhat-waffle@^2.0.6 @nomiclabs/hardhat-ethers@^2.2.3 ethereum-waffle@^4.0.10 @nomicfoundation/hardhat-chai-matchers@^1.0.6
-npm warn deprecated testrpc@0.0.1: testrpc has been renamed to ganache-cli, please use this package from now on.
-npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
-npm warn deprecated rimraf@2.7.1: Rimraf versions prior to v4 are no longer supported
-npm warn deprecated har-validator@5.1.5: this library is no longer supported
-npm warn deprecated glob@7.2.0: Glob versions prior to v9 are no longer supported
-npm warn deprecated glob@8.1.0: Glob versions prior to v9 are no longer supported
-npm warn deprecated glob@7.1.7: Glob versions prior to v9 are no longer supported
-npm warn deprecated level-errors@2.0.1: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated level-mem@5.0.1: Superseded by memory-level (https://github.com/Level/community#faq)
-npm warn deprecated memdown@5.1.0: Superseded by memory-level (https://github.com/Level/community#faq)
-npm warn deprecated encoding-down@6.3.0: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated level-concat-iterator@2.0.1: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated deferred-leveldown@5.3.0: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated ethereumjs-abi@0.6.8: This library has been deprecated and usage is discouraged.
-npm warn deprecated levelup@4.4.0: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated level-codec@9.0.2: Superseded by level-transcoder (https://github.com/Level/community#faq)
-npm warn deprecated level-packager@5.1.1: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated uuid@3.4.0: Please upgrade  to version 7 or higher.  Older versions may use Math.random() in certain circumstances, which is known to be problematic.  See https://v8.dev/blog/math-random for details.
-npm warn deprecated request@2.88.2: request has been deprecated, see https://github.com/request/request/issues/3142
-npm warn deprecated abstract-leveldown@6.3.0: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated abstract-leveldown@6.2.3: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated abstract-leveldown@6.2.3: Superseded by abstract-level (https://github.com/Level/community#faq)
-npm warn deprecated @ensdomains/ens@0.4.5: Please use @ensdomains/ens-contracts
-npm warn deprecated @ensdomains/resolver@0.2.4: Please use @ensdomains/ens-contracts
+1. CREATE FULL SHARE (all files with line numbers)
+2. CREATE DIFF SHARE (changed files only)
+3. GIT COMMIT + PUSH
+4. EXIT
 
-added 624 packages, and audited 661 packages in 2m
+Enter choice (1-4): 4
+(venv) PS D:\Web3Projects\NFTMarketplace> Get-ChildItem -Path . -Filter "SimpleNFT.sol" -Recurse
 
-105 packages are looking for funding
-  run `npm fund` for details
+    Directory: D:\Web3Projects\NFTMarketplace\contracts
 
-63 vulnerabilities (43 low, 11 moderate, 6 high, 3 critical)
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+-a---          10/01/2026    14:29           5401 SimpleNFT.sol
 
-To address issues that do not require attention, run:
-  npm audit fix
-
-To address all issues (including breaking changes), run:
-  npm audit fix --force
-
-Run `npm audit` for details.
-(venv) PS D:\Web3Projects\NFTMarketplace> @'
->> require("@nomiclabs/hardhat-waffle");
->> require("@nomiclabs/hardhat-ethers");
->> require("@nomicfoundation/hardhat-chai-matchers");
->> require("dotenv").config();
->>
->> /** @type import('hardhat/config').HardhatUserConfig */
->> module.exports = {
->>   solidity: {
->>     version: "0.8.20",
->>     settings: {
->>       optimizer: {
->>         enabled: true,
->>         runs: 200
->>       }
->>     }
->>   },
->>   networks: {
->>     hardhat: {
->>       chainId: 31337
->>     },
->>     sepolia: {
->>       url: process.env.SEPOLIA_RPC_URL || "",
->>       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
->>       chainId: 11155111
->>     },
->>     mumbai: {
->>       url: process.env.MUMBAI_RPC_URL || "",
->>       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
->>       chainId: 80001
->>     }
->>   },
->>   paths: {
->>     sources: "./contracts",
->>     tests: "./tests",
->>     cache: "./cache",
->>     artifacts: "./artifacts"
->>   }
->> };
->> '@ | Out-File -FilePath "hardhat.config.js" -Encoding UTF8 -Force
-(venv) PS D:\Web3Projects\NFTMarketplace> @'
->> const hre = require("hardhat");
->>
->> async function main() {
->>   console.log("?? Déploiement du contrat SimpleNFT (Hardhat v2)...");
->>
->>   // Récupérer le contrat - syntaxe v2
->>   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
->>
->>   // Déployer avec paramètres
->>   const simpleNFT = await SimpleNFT.deploy(
->>     "Simple NFT",
->>     "SNFT",
->>     "https://api.nftmarketplace.com/metadata/"
->>   );
->>
->>   // Attendre le déploiement - syntaxe v2
->>   await simpleNFT.deployed();
->>
->>   console.log(`? SimpleNFT déployé à: ${simpleNFT.address}`);
->>   console.log(`    Name: ${await simpleNFT.name()}`);
->>   console.log(`    Symbol: ${await simpleNFT.symbol()}`);
->>
->>   return simpleNFT.address;
->> }
->>
->> // Exécuter directement
->> main()
->>   .then(() => process.exit(0))
->>   .catch((error) => {
->>     console.error(error);
->>     process.exit(1);
->>   });
->> '@ | Out-File -FilePath "scripts/deploy-simple.js" -Encoding UTF8 -Force
-(venv) PS D:\Web3Projects\NFTMarketplace> npx hardhat compile
-An unexpected error occurred:
-
-Error: Cannot find module '@nomicfoundation/hardhat-toolbox'
-Require stack:
-- D:\Web3Projects\NFTMarketplace\hardhat.config.cjs
-- D:\Web3Projects\NFTMarketplace\node_modules\hardhat\internal\core\config\config-loading.js
-- D:\Web3Projects\NFTMarketplace\node_modules\hardhat\internal\cli\cli.js
-- D:\Web3Projects\NFTMarketplace\node_modules\hardhat\internal\cli\bootstrap.js
-    at Function.Module._resolveFilename (node:internal/modules/cjs/loader:1207:15)
-    at Function.Module._load (node:internal/modules/cjs/loader:1038:27)
-    at Module.require (node:internal/modules/cjs/loader:1289:19)
-    at require (node:internal/modules/helpers:182:18)
-    at Object.<anonymous> (D:\Web3Projects\NFTMarketplace\hardhat.config.cjs:1:1)
-    at Module._compile (node:internal/modules/cjs/loader:1521:14)
-    at Object.Module._extensions..js (node:internal/modules/cjs/loader:1623:10)
-    at Module.load (node:internal/modules/cjs/loader:1266:32)
-    at Function.Module._load (node:internal/modules/cjs/loader:1091:12)
-    at Module.require (node:internal/modules/cjs/loader:1289:19) {
-  code: 'MODULE_NOT_FOUND',
-  requireStack: [
-    'D:\\Web3Projects\\NFTMarketplace\\hardhat.config.cjs',
-    'D:\\Web3Projects\\NFTMarketplace\\node_modules\\hardhat\\internal\\core\\config\\config-loading.js',
-    'D:\\Web3Projects\\NFTMarketplace\\node_modules\\hardhat\\internal\\cli\\cli.js',
-    'D:\\Web3Projects\\NFTMarketplace\\node_modules\\hardhat\\internal\\cli\\bootstrap.js'
-  ]
-}
-(venv) PS D:\Web3Projects\NFTMarketplace> npx hardhat run scripts/deploy-simple.js
+(venv) PS D:\Web3Projects\NFTMarketplace> Copy-Item -Path "D:\Web3Projects\NFTMarketplace\contracts\SimpleNFT.sol" -Destination ".\contracts\" -Force
+Copy-Item: Cannot overwrite the item D:\Web3Projects\NFTMarketplace\contracts\SimpleNFT.sol with itself.
+(venv) PS D:\Web3Projects\NFTMarketplace> npx hardhat clean
 An unexpected error occurred:
 
 Error: Cannot find module '@nomicfoundation/hardhat-toolbox'

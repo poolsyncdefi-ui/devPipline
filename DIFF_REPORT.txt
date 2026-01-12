@@ -1,7 +1,7 @@
 ============================================================================== 
 STRUCTURED LENDING PROTOCOL - DIFF REPORT 
 ============================================================================== 
-Date: 10/01/2026 Time: 15:29:08,24 
+Date: 10/01/2026 Time: 21:37:21,60 
  
 [GIT STATUS] 
 ------------------------------------------------------------------------------ 
@@ -10,49 +10,7 @@ Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
 	modified:   DIFF_REPORT.txt
-	modified:   PROJECT_SHARE.txt
-	modified:   hardhat.config.js
-	modified:   package-lock.json
-	modified:   package.json
-	modified:   requirements-agents.txt
 	modified:   stdout.txt
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	agents/
-	contracts/SimpleNFT.sol
-	pipeline/
-	scripts/check_env.py
-	scripts/deploy-simple.js
-	scripts/deploy.js
-	tests/SimpleNFT.test.js
-	venv/Include/
-	venv/Scripts/distro.exe
-	venv/Scripts/dotenv.exe
-	venv/Scripts/f2py.exe
-	venv/Scripts/filetype.exe
-	venv/Scripts/griffe.exe
-	venv/Scripts/httpx.exe
-	venv/Scripts/jsondiff
-	venv/Scripts/jsonpatch
-	venv/Scripts/jsonpointer
-	venv/Scripts/llama-index-instrumentation.exe
-	venv/Scripts/llama-parse.exe
-	venv/Scripts/llamaindex-cli.exe
-	venv/Scripts/markdown-it.exe
-	venv/Scripts/nltk.exe
-	venv/Scripts/numpy-config.exe
-	venv/Scripts/openai.exe
-	venv/Scripts/pygmentize.exe
-	venv/Scripts/pyrsa-decrypt.exe
-	venv/Scripts/pyrsa-encrypt.exe
-	venv/Scripts/pyrsa-keygen.exe
-	venv/Scripts/pyrsa-priv2pub.exe
-	venv/Scripts/pyrsa-sign.exe
-	venv/Scripts/pyrsa-verify.exe
-	venv/Scripts/striprtf
-	venv/Scripts/tqdm.exe
-	venv/Scripts/watchmedo.exe
 
 no changes added to commit (use "git add" and/or "git commit -a")
  
@@ -63,19 +21,14 @@ No changes detected in the working directory.
  
 [GIT DIFF SUMMARY] 
 ============================================================================== 
- DIFF_REPORT.txt         |   77 +-
- PROJECT_SHARE.txt       |  367 +-
- hardhat.config.js       |   24 +-
- package-lock.json       | 8646 ++++++++++++++++++++++++++---------------------
- package.json            |   14 +-
- requirements-agents.txt |   11 +-
- stdout.txt              |  316 +-
- 7 files changed, 5329 insertions(+), 4126 deletions(-)
+ DIFF_REPORT.txt |  64 +----------------------
+ stdout.txt      | 159 ++++++--------------------------------------------------
+ 2 files changed, 18 insertions(+), 205 deletions(-)
  
 [REPORT SUMMARY] 
 ============================================================================== 
 Total changed files: 0 
-Report generated: 10/01/2026 15:29:08,51 
+Report generated: 10/01/2026 21:37:21,85 
  
 INSTRUCTIONS FOR CODE REVIEW: 
 1. Files are listed with full paths for precise location 
