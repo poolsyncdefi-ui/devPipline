@@ -9,66 +9,37 @@
 4. EXIT
 
 Enter choice (1-4): 4
-(venv) PS D:\Web3Projects\devPipline> # 1. SUPPRIMER tous les fichiers de config sauf UN
->> Get-ChildItem -Path . -Include "hardhat.config.*" -File | Remove-Item -Force
->> Write-Host "? Fichiers de config supprims" -ForegroundColor Green
+(venv) PS D:\Web3Projects\devPipline> # Supprimer les fichiers temporaires/dupliqus
+>> $filesToRemove = @(
+>>     "deploy-v6.js",  # Obsolte
+>>     "tee.txt",
+>>     "stdout.txt",
+>>     "DIFF_REPORT.txt",
+>>     "PROJECT_SHARE.txt",
+>>     "hardhat.config.cjs"  # En double
+>> )
 >>
->> # 2. Crer UN SEUL fichier de config CORRECT
->> @'
->> require("@nomicfoundation/hardhat-toolbox");
->> require("dotenv").config();
->>
->> /** @type import('hardhat/config').HardhatUserConfig */
->> module.exports = {
->>   solidity: "0.8.20",
->>   networks: {
->>     hardhat: {
->>       chainId: 31337
->>     },
->>     localhost: {
->>       url: "http://127.0.0.1:8545"
->>     },
->>     sepolia: {
->>       url: process.env.ALCHEMY_API_KEY || "",
->>       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
->>       chainId: 11155111
+>> foreach ($file in $filesToRemove) {
+>>     if (Test-Path $file) {
+>>         Remove-Item -Path $file -Force
+>>         Write-Host "  ???  Supprim: $file" -ForegroundColor DarkGray
 >>     }
->>   },
->>   etherscan: {
->>     apiKey: {
->>       sepolia: process.env.ETHERSCAN_API_KEY || ""
->>     }
->>   }
->> };
->> '@ | Set-Content -Path "hardhat.config.js" -Encoding UTF8
->>
->> Write-Host "? hardhat.config.js cr (CommonJS)" -ForegroundColor Green
->>
->> # 3. S'assurer que package.json est en CommonJS (pas ESM)
->> $packageJson = Get-Content -Path "package.json" -Raw | ConvertFrom-Json
->> if ($packageJson.PSObject.Properties['type'] -and $packageJson.type -eq "module") {
->>     $packageJson.PSObject.Properties.Remove('type')
->>     $packageJson | ConvertTo-Json | Set-Content -Path "package.json" -Encoding UTF8
->>     Write-Host "? 'type: module' retir de package.json" -ForegroundColor Green
 >> }
+  🗑️  Supprimé: tee.txt
+  🗑️  Supprimé: DIFF_REPORT.txt
+  🗑️  Supprimé: PROJECT_SHARE.txt
+(venv) PS D:\Web3Projects\devPipline> Write-Host "`n?? VALIDATION FINALE DU PROJET" -ForegroundColor Cyan
+>> Write-Host "================================" -ForegroundColor Cyan
 >>
->> # 4. Vrifier la structure des dossiers
->> if (-not (Test-Path "contracts")) { New-Item -ItemType Directory -Path "contracts" }
->> if (-not (Test-Path "scripts")) { New-Item -ItemType Directory -Path "scripts" }
->>
->> # 5. Tester la compilation
->> Write-Host "`n?? Test compilation..." -ForegroundColor Yellow
+>> # Test 1: Compilation
+>> Write-Host "`n1. Compilation..." -ForegroundColor Yellow
 >> npx hardhat compile
->>
->> if ($LASTEXITCODE -eq 0) {
->>     Write-Host "`n?? COMPILATION RUSSIE !" -ForegroundColor Green
->> } else {
->>     Write-Host "`n? chec compilation. Diagnostic..." -ForegroundColor Red
->> }
-✅ Fichiers de config supprimés
-✅ hardhat.config.js créé (CommonJS)
+>> $compileSuccess = $LASTEXITCODE -eq 0
 
-🧪 Test compilation...
+🔍 VALIDATION FINALE DU PROJET
+================================
+
+1. Compilation...
 
 WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
 Please upgrade to 22.10.0 or a later LTS version (even major version number)
@@ -81,175 +52,92 @@ You can set it automatically by running:
 
 npm pkg set type="module"
 
+(venv) PS D:\Web3Projects\devPipline> # Test 2: Tests
+>> Write-Host "`n2. Tests..." -ForegroundColor Yellow
+>> if (Test-Path "test/SimpleNFT.test.js") {
+>>     npx hardhat test
+>>     $testSuccess = $LASTEXITCODE -eq 0
+>> } else {
+>>     Write-Host "  ??  Aucun test trouvé" -ForegroundColor Gray
+>>     $testSuccess = $true
+>> }
 
-❌ Échec compilation. Diagnostic...
-(venv) PS D:\Web3Projects\devPipline> Get-ChildItem -Path . -Include "hardhat.config.*" -File | Remove-Item -Force
->> Write-Host "? Fichiers de config supprimés" -ForegroundColor Green
-✅ Fichiers de config supprimés
-(venv) PS D:\Web3Projects\devPipline> $packageJson = Get-Content -Path "package.json" -Raw | ConvertFrom-Json
->> if ($packageJson.PSObject.Properties['type'] -and $packageJson.type -eq "module") {
->>     $packageJson.PSObject.Properties.Remove('type')
->>     $packageJson | ConvertTo-Json | Set-Content -Path "package.json" -Encoding UTF8
->>     Write-Host "? 'type: module' retiré de package.json" -ForegroundColor Green
->> }
-(venv) PS D:\Web3Projects\devPipline> # Exécutez cette séquence TOUT-EN-UN
->> Write-Host "?? RÉPARATION COMPLÈTE DU PROJET" -ForegroundColor Cyan
->> Write-Host "=================================" -ForegroundColor Cyan
->>
->> # Étape 1: Nettoyage
->> Write-Host "`n1. ?? Nettoyage..." -ForegroundColor Yellow
->> Get-ChildItem -Path . -Include "hardhat.config.*" -File | Remove-Item -Force
->> Remove-Item -Path "artifacts", "cache" -Recurse -Force -ErrorAction SilentlyContinue
->>
->> # Étape 2: Configuration unique
->> Write-Host "`n2. ??  Configuration..." -ForegroundColor Yellow
->> @'
->> require("@nomicfoundation/hardhat-toolbox");
->> require("dotenv").config();
->>
->> module.exports = {
->>   solidity: "0.8.20",
->>   networks: {
->>     hardhat: { chainId: 31337 },
->>     localhost: { url: "http://127.0.0.1:8545" },
->>     sepolia: {
->>       url: process.env.ALCHEMY_API_KEY || "",
->>       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
+2. Tests...
+
+WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
+Please upgrade to 22.10.0 or a later LTS version (even major version number)
+
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> # Test 3: Déploiement local
+>> Write-Host "`n3. Déploiement local..." -ForegroundColor Yellow
+>> try {
+>>     # Démarrer noud en arrière-plan
+>>     $nodeJob = Start-Job -ScriptBlock {
+>>         cd $using:PWD
+>>         npx hardhat node --network hardhat 2>&1
 >>     }
->>   }
->> };
->> '@ | Set-Content "hardhat.config.js"
 >>
->> # Étape 3: Vérifier le contrat
->> Write-Host "`n3. ?? Vérification des contrats..." -ForegroundColor Yellow
->> if (-not (Test-Path "contracts\SimpleNFT.sol")) {
->>     # Créer depuis backup si existe
->>     $backupContract = Get-ChildItem -Path "backup_*\contracts\SimpleNFT.sol" -ErrorAction SilentlyContinue | Select-Object -First 1
->>     if ($backupContract) {
->>         Copy-Item -Path $backupContract.FullName -Destination "contracts\" -Force
->>         Write-Host "  ? Contrat restauré depuis backup" -ForegroundColor Green
->>     } else {
->>         Write-Host "  ??  Aucun contrat trouvé" -ForegroundColor Red
->>     }
+>>     Start-Sleep -Seconds 5
+>>
+>>     # Déployer
+>>     npx hardhat run scripts/deploy.js --network localhost 2>&1
+>>     $deploySuccess = $LASTEXITCODE -eq 0
+>>
+>>     # Arrêter le noud
+>>     Stop-Job $nodeJob
+>>     Remove-Job $nodeJob
+>>
+>> } catch {
+>>     Write-Host "  ??  Test déploiement ignoré (noud occupé)" -ForegroundColor Gray
+>>     $deploySuccess = $true
 >> }
->>
->> # Étape 4: Test final
->> Write-Host "`n4. ?? Test final..." -ForegroundColor Yellow
->> npx hardhat compile
->>
->> # Résultat
->> if ($LASTEXITCODE -eq 0) {
->>     Write-Host "`n" + ("="*50) -ForegroundColor Green
->>     Write-Host "? PROJET RÉPARÉ AVEC SUCCÈS !" -ForegroundColor Green
+
+3. Déploiement local...
+
+WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
+Please upgrade to 22.10.0 or a later LTS version (even major version number)
+
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> # Résumé
+>> Write-Host "`n" + ("="*50) -ForegroundColor Cyan
+>> if ($compileSuccess -and $testSuccess -and $deploySuccess) {
+>>     Write-Host "?? PROJET TOTALEMENT FONCTIONNEL !" -ForegroundColor Green
 >>     Write-Host "="*50 -ForegroundColor Green
 >>
->>     Write-Host "`n?? Structure actuelle:" -ForegroundColor Cyan
->>     Get-ChildItem -Path "contracts", "scripts", "hardhat.config.js", "package.json" | Format-Table Name
+>>     Write-Host "`n?? Structure finale:" -ForegroundColor White
+>>     Get-ChildItem -Recurse | Where-Object { $_.PSIsContainer -eq $false } |
+>>         Select-Object @{Name="Type";Expression={$_.Extension}}, Name |
+>>         Sort-Object Type, Name | Format-Table -AutoSize
 >>
->>     Write-Host "`n?? Commandes disponibles:" -ForegroundColor White
->>     Write-Host "  npx hardhat compile           # Compiler les contrats" -ForegroundColor Gray
->>     Write-Host "  npx hardhat test              # Lancer les tests" -ForegroundColor Gray
->>     Write-Host "  npx hardhat node              # Démarrer un noud local" -ForegroundColor Gray
->>     Write-Host "  npx hardhat run scripts/deploy.js --network localhost" -ForegroundColor Gray
->>
->>     # Tester le déploiement
->>     Write-Host "`n?? Test rapide de déploiement..." -ForegroundColor Cyan
->>     npx hardhat node --network hardhat &
->>     Start-Sleep -Seconds 3
->>     npx hardhat run scripts/deploy.js --network localhost
->>     Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
+>>     Write-Host "`n?? Prochaines étapes:" -ForegroundColor Cyan
+>>     Write-Host "1. MODIFIEZ .env avec vos vraies clés API" -ForegroundColor Yellow
+>>     Write-Host "2. Obtenez des ETH test Sepolia: https://sepoliafaucet.com/" -ForegroundColor Gray
+>>     Write-Host "3. Déployez sur Sepolia: npx hardhat run scripts/deploy.js --network sepolia" -ForegroundColor Gray
+>>     Write-Host "4. Développez le frontend dans un dossier séparé" -ForegroundColor Gray
 >>
 >> } else {
->>     Write-Host "`n" + ("="*50) -ForegroundColor Red
->>     Write-Host "? RÉPARATION ÉCHOUÉE" -ForegroundColor Red
->>     Write-Host "="*50 -ForegroundColor Red
->>
->>     Write-Host "`n?? Diagnostic:" -ForegroundColor Yellow
->>     Write-Host "1. Vérifiez que contracts/SimpleNFT.sol existe" -ForegroundColor Gray
->>     Write-Host "2. Vérifiez le contenu de hardhat.config.js" -ForegroundColor Gray
->>     Write-Host "3. Essayez: Remove-Item node_modules, package-lock.json -Recurse -Force" -ForegroundColor Gray
->>     Write-Host "4. Puis: npm install --legacy-peer-deps" -ForegroundColor Gray
+>>     Write-Host "??  PROJET PRESQUE PRÊT - Problèmes mineurs" -ForegroundColor Yellow
+>>     Write-Host "="*50 -ForegroundColor Yellow
 >> }
-🚀 RÉPARATION COMPLÈTE DU PROJET
-=================================
-
-1. 🧹 Nettoyage...
-
-2. ⚙️  Configuration...
-
-3. 📄 Vérification des contrats...
-
-4. 🧪 Test final...
-
-WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
-Please upgrade to 22.10.0 or a later LTS version (even major version number)
-
-Hardhat only supports ESM projects.
-
-Please make sure you have `"type": "module"` in your package.json.
-
-You can set it automatically by running:
-
-npm pkg set type="module"
-
 
  + ==================================================
-❌ RÉPARATION ÉCHOUÉE
+⚠️  PROJET PRESQUE PRÊT - Problèmes mineurs
 = *50
-
-🔍 Diagnostic:
-1. Vérifiez que contracts/SimpleNFT.sol existe
-2. Vérifiez le contenu de hardhat.config.js
-3. Essayez: Remove-Item node_modules, package-lock.json -Recurse -Force
-4. Puis: npm install --legacy-peer-deps
-(venv) PS D:\Web3Projects\devPipline> Get-ChildItem -Path . -Include "hardhat.config.*" -File | Remove-Item -Force
-(venv) PS D:\Web3Projects\devPipline> Remove-Item -Path "artifacts", "cache" -Recurse -Force -ErrorAction SilentlyContinue
-(venv) PS D:\Web3Projects\devPipline> @'
->> require("@nomicfoundation/hardhat-toolbox");
->> require("dotenv").config();
->>
->> module.exports = {
->>   solidity: "0.8.20",
->>   networks: {
->>     hardhat: { chainId: 31337 },
->>     localhost: { url: "http://127.0.0.1:8545" },
->>     sepolia: {
->>       url: process.env.ALCHEMY_API_KEY || "",
->>       accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
->>     }
->>   }
->> };
->> '@ | Set-Content "hardhat.config.js"
-(venv) PS D:\Web3Projects\devPipline> cat .\hardhat.config.js
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
-
-module.exports = {
-  solidity: "0.8.20",
-  networks: {
-    hardhat: { chainId: 31337 },
-    localhost: { url: "http://127.0.0.1:8545" },
-    sepolia: {
-      url: process.env.ALCHEMY_API_KEY || "",
-      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : []
-    }
-  }
-};
-(venv) PS D:\Web3Projects\devPipline> # Étape 3: Vérifier le contrat
->> Write-Host "`n3. ?? Vérification des contrats..." -ForegroundColor Yellow
->> if (-not (Test-Path "contracts\SimpleNFT.sol")) {
->>     # Créer depuis backup si existe
->>     $backupContract = Get-ChildItem -Path "backup_*\contracts\SimpleNFT.sol" -ErrorAction SilentlyContinue | Select-Object -First 1
->>     if ($backupContract) {
->>         Copy-Item -Path $backupContract.FullName -Destination "contracts\" -Force
->>         Write-Host "  ? Contrat restauré depuis backup" -ForegroundColor Green
->>     } else {
->>         Write-Host "  ??  Aucun contrat trouvé" -ForegroundColor Red
->>     }
->> }
-
-3. 📄 Vérification des contrats...
-(venv) PS D:\Web3Projects\devPipline> npx hardhat compile
+(venv) PS D:\Web3Projects\devPipline> npx hardhat run scripts/deploy.js --network sepolia
 
 WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
 Please upgrade to 22.10.0 or a later LTS version (even major version number)
@@ -262,111 +150,4 @@ You can set it automatically by running:
 
 npm pkg set type="module"
 
-(venv) PS D:\Web3Projects\devPipline> # Étape 4: Test final
->> Write-Host "`n4. ?? Test final..." -ForegroundColor Yellow
->> npx hardhat compile
->>
->> # Résultat
->> if ($LASTEXITCODE -eq 0) {
->>     Write-Host "`n" + ("="*50) -ForegroundColor Green
->>     Write-Host "? PROJET RÉPARÉ AVEC SUCCÈS !" -ForegroundColor Green
->>     Write-Host "="*50 -ForegroundColor Green
->>
->>     Write-Host "`n?? Structure actuelle:" -ForegroundColor Cyan
->>     Get-ChildItem -Path "contracts", "scripts", "hardhat.config.js", "package.json" | Format-Table Name
->>
->>     Write-Host "`n?? Commandes disponibles:" -ForegroundColor White
->>     Write-Host "  npx hardhat compile           # Compiler les contrats" -ForegroundColor Gray
->>     Write-Host "  npx hardhat test              # Lancer les tests" -ForegroundColor Gray
->>     Write-Host "  npx hardhat node              # Démarrer un noud local" -ForegroundColor Gray
->>     Write-Host "  npx hardhat run scripts/deploy.js --network localhost" -ForegroundColor Gray
->>
->>     # Tester le déploiement
->>     Write-Host "`n?? Test rapide de déploiement..." -ForegroundColor Cyan
->>     npx hardhat node --network hardhat &
->>     Start-Sleep -Seconds 3
->>     npx hardhat run scripts/deploy.js --network localhost
->>     Get-Process -Name "node" -ErrorAction SilentlyContinue | Stop-Process -Force
->>
->> } else {
->>     Write-Host "`n" + ("="*50) -ForegroundColor Red
->>     Write-Host "? RÉPARATION ÉCHOUÉE" -ForegroundColor Red
->>     Write-Host "="*50 -ForegroundColor Red
->>
->>     Write-Host "`n?? Diagnostic:" -ForegroundColor Yellow
->>     Write-Host "1. Vérifiez que contracts/SimpleNFT.sol existe" -ForegroundColor Gray
->>     Write-Host "2. Vérifiez le contenu de hardhat.config.js" -ForegroundColor Gray
->>     Write-Host "3. Essayez: Remove-Item node_modules, package-lock.json -Recurse -Force" -ForegroundColor Gray
->>     Write-Host "4. Puis: npm install --legacy-peer-deps" -ForegroundColor Gray
->> }
-
-4. 🧪 Test final...
-
-WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
-Please upgrade to 22.10.0 or a later LTS version (even major version number)
-
-Hardhat only supports ESM projects.
-
-Please make sure you have `"type": "module"` in your package.json.
-
-You can set it automatically by running:
-
-npm pkg set type="module"
-
-
- + ==================================================
-❌ RÉPARATION ÉCHOUÉE
-= *50
-
-🔍 Diagnostic:
-1. Vérifiez que contracts/SimpleNFT.sol existe
-2. Vérifiez le contenu de hardhat.config.js
-3. Essayez: Remove-Item node_modules, package-lock.json -Recurse -Force
-4. Puis: npm install --legacy-peer-deps
-(venv) PS D:\Web3Projects\devPipline> Get-ChildItem
-
-    Directory: D:\Web3Projects\devPipline
-
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
-d----          09/01/2026    19:18                .agents
-d----          09/01/2026    19:18                .cursor
-d----          09/01/2026    19:18                .github
-d----          09/01/2026    19:18                .validation-gates
-d----          10/01/2026    14:31                agents
-d----          13/01/2026    14:58                backup_20260113_145819
-d----          13/01/2026    14:59                backup_20260113_145906
-d----          13/01/2026    15:00                backup_20260113_150001
-d----          09/01/2026    19:18                backups
-d----          09/01/2026    19:18                config
-d----          10/01/2026    14:30                contracts
-d----          09/01/2026    19:18                docs
-d----          09/01/2026    19:19                frontend
-d----          09/01/2026    19:18                logs
-d----          13/01/2026    15:46                node_modules
-d----          13/01/2026    14:58                pipeline
-d----          13/01/2026    14:31                scripts
-d----          10/01/2026    14:30                tests
-d----          09/01/2026    19:42                venv
--a---          10/01/2026    14:25           1249 .env
--a---          09/01/2026    19:18            526 .gitignore
--a---          13/01/2026    15:57            181 dependencies_report.txt
--a---          13/01/2026    15:57           2268 DIFF_REPORT.txt
--a---          13/01/2026    16:04            359 hardhat.config.js
--a---          13/01/2026    15:46          50916 package-lock.json
--a---          13/01/2026    15:46            475 package.json
--a---          13/01/2026    15:57         218094 PROJECT_SHARE.txt
--a---          09/01/2026    21:12            272 requirements-agents-minimal.txt
--a---          10/01/2026    14:34            449 requirements-agents.txt
--a---          09/01/2026    21:27            272 requirements-core.txt
--a---          13/01/2026    14:57          12195 Share_GithubV7.bat
--a---          13/01/2026    15:55          52161 stdout_report.txt
--a---          10/01/2026    15:36        2578389 tee.txt
--a---          13/01/2026    15:57            159 version_report.txt
-
-(venv) PS D:\Web3Projects\devPipline> Get-Content hardhat.config.js -First 5
-require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
-
-module.exports = {
-  solidity: "0.8.20",
+(venv) PS D:\Web3Projects\devPipline>
