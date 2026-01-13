@@ -1,153 +1,435 @@
-
-========================================
-  FINAL SHARE - BATCH ONLY
-========================================
-
-1. CREATE FULL SHARE (all files with line numbers)
-2. CREATE DIFF SHARE (changed files only)
-3. GIT COMMIT + PUSH
-4. EXIT
-
-Enter choice (1-4): 4
-(venv) PS D:\Web3Projects\devPipline> # Supprimer les fichiers temporaires/dupliqus
->> $filesToRemove = @(
->>     "deploy-v6.js",  # Obsolte
->>     "tee.txt",
->>     "stdout.txt",
->>     "DIFF_REPORT.txt",
->>     "PROJECT_SHARE.txt",
->>     "hardhat.config.cjs"  # En double
->> )
+(venv) PS D:\Web3Projects\devPipline> # 1. Désinstaller le plugin problématique
+>> npm uninstall @nomicfoundation/hardhat-verify
+>> Write-Host "🔧 hardhat-verify désinstallé (incompatible ESM)" -ForegroundColor Yellow
 >>
->> foreach ($file in $filesToRemove) {
->>     if (Test-Path $file) {
->>         Remove-Item -Path $file -Force
->>         Write-Host "  ???  Supprim: $file" -ForegroundColor DarkGray
+>> # 2. Configuration sans hardhat-verify (pour l'instant)
+>> @'
+>> import "@nomicfoundation/hardhat-ethers";
+>> import * as dotenv from "dotenv";
+>>
+>> dotenv.config();
+>>
+>> const config = {
+>>   solidity: "0.8.20",
+>>   networks: {
+>>     hardhat: {
+>>       type: "edr-simulated"
+>>     }
+>>   }
+>> };
+>>
+>> export default config;
+>> '@ | Set-Content -Path "hardhat.config.js" -Encoding UTF8
+>>
+>> Write-Host "✅ Configuration simplifiée (sans verify)" -ForegroundColor Green
+npm warn ERESOLVE overriding peer dependency
+npm warn While resolving: @nomicfoundation/hardhat-verify@2.1.3
+npm warn Found: hardhat@3.1.3
+npm warn node_modules/hardhat
+npm warn   peer hardhat@"^3.0.7" from @nomicfoundation/hardhat-ethers@4.0.4
+npm warn   node_modules/@nomicfoundation/hardhat-ethers
+npm warn     dev @nomicfoundation/hardhat-ethers@"^4.0.0" from the root project
+npm warn   1 more (the root project)
+npm warn
+npm warn Could not resolve dependency:
+npm warn peer hardhat@"^2.26.0" from @nomicfoundation/hardhat-verify@2.1.3
+npm warn node_modules/@nomicfoundation/hardhat-verify
+npm warn
+npm warn Conflicting peer dependency: hardhat@2.28.3
+npm warn node_modules/hardhat
+npm warn   peer hardhat@"^2.26.0" from @nomicfoundation/hardhat-verify@2.1.3
+npm warn   node_modules/@nomicfoundation/hardhat-verify
+
+removed 51 packages, and audited 72 packages in 2s
+
+20 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+🔧 hardhat-verify désinstallé (incompatible ESM)
+✅ Configuration simplifiée (sans verify)
+(venv) PS D:\Web3Projects\devPipline> # Créer un contrat SimpleNFT CORRIGÉ
+>> @'
+>> // SPDX-License-Identifier: MIT
+>> pragma solidity 0.8.20;
+>>
+>> import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+>> import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+>> import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+>> import "@openzeppelin/contracts/access/Ownable.sol";
+>> import "@openzeppelin/contracts/utils/Counters.sol";
+>>
+>> contract SimpleNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
+>>     using Counters for Counters.Counter;
+>>
+>>     Counters.Counter private _tokenIdCounter;
+>>     string private _baseTokenURI;
+>>     uint256 public constant MAX_SUPPLY = 10000;
+>>     uint256 public mintPrice = 0.01 ether;
+>>
+>>     event NFTMinted(address indexed to, uint256 indexed tokenId, string tokenURI);
+>>     event NFTBurned(address indexed owner, uint256 indexed tokenId);
+>>     event BaseURIUpdated(string newBaseURI);
+>>
+>>     constructor(
+>>         string memory name,
+>>         string memory symbol,
+>>         string memory baseURI
+>>     ) ERC721(name, symbol) Ownable(msg.sender) {
+>>         _baseTokenURI = baseURI;
+>>     }
+>>
+>>     function safeMint(address to, string memory tokenURI)
+>>         public
+>>         payable
+>>         returns (uint256)
+>>     {
+>>         require(msg.value >= mintPrice, "Insufficient payment");
+>>         require(totalSupply() < MAX_SUPPLY, "Max supply reached");
+>>
+>>         uint256 tokenId = _tokenIdCounter.current();
+>>         _tokenIdCounter.increment();
+>>
+>>         _safeMint(to, tokenId);
+>>         _setTokenURI(tokenId, tokenURI);
+>>
+>>         if (msg.value > mintPrice) {
+>>             payable(msg.sender).transfer(msg.value - mintPrice);
+>>         }
+>>
+>>         emit NFTMinted(to, tokenId, tokenURI);
+>>         return tokenId;
+>>     }
+>>
+>>     function ownerMint(address to, string memory tokenURI)
+>>         public
+>>         onlyOwner
+>>         returns (uint256)
+>>     {
+>>         require(totalSupply() < MAX_SUPPLY, "Max supply reached");
+>>
+>>         uint256 tokenId = _tokenIdCounter.current();
+>>         _tokenIdCounter.increment();
+>>
+>>         _safeMint(to, tokenId);
+>>         _setTokenURI(tokenId, tokenURI);
+>>
+>>         emit NFTMinted(to, tokenId, tokenURI);
+>>         return tokenId;
+>>     }
+>>
+>>     function burn(uint256 tokenId) public {
+>>         require(_isApprovedOrOwner(_msgSender(), tokenId), "Not owner nor approved");
+>>         _burn(tokenId);
+>>         emit NFTBurned(msg.sender, tokenId);
+>>     }
+>>
+>>     function setMintPrice(uint256 newPrice) public onlyOwner {
+>>         mintPrice = newPrice;
+>>     }
+>>
+>>     function setBaseURI(string memory newBaseURI) public onlyOwner {
+>>         _baseTokenURI = newBaseURI;
+>>         emit BaseURIUpdated(newBaseURI);
+>>     }
+>>
+>>     function withdraw() public onlyOwner {
+>>         uint256 balance = address(this).balance;
+>>         require(balance > 0, "No balance to withdraw");
+>>         payable(owner()).transfer(balance);
+>>     }
+>>
+>>     // ==== Overrides nécessaires ====
+>>
+>>     function _baseURI() internal view override returns (string memory) {
+>>         return _baseTokenURI;
+>>     }
+>>
+>>     function _beforeTokenTransfer(address from, address to, uint256 tokenId, uint256 batchSize)
+>>         internal
+>>         override(ERC721, ERC721Enumerable)
+>>     {
+>>         super._beforeTokenTransfer(from, to, tokenId, batchSize);
+>>     }
+>>
+>>     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+>>         super._burn(tokenId);
+>>     }
+>>
+>>     function tokenURI(uint256 tokenId)
+>>         public
+>>         view
+>>         override(ERC721, ERC721URIStorage)
+>>         returns (string memory)
+>>     {
+>>         return super.tokenURI(tokenId);
+>>     }
+>>
+>>     function supportsInterface(bytes4 interfaceId)
+>>         public
+>>         view
+>>         override(ERC721, ERC721Enumerable, ERC721URIStorage)
+>>         returns (bool)
+>>     {
+>>         return super.supportsInterface(interfaceId);
+>>     }
+>>
+>>     // ==== Getters ====
+>>
+>>     function nextTokenId() public view returns (uint256) {
+>>         return _tokenIdCounter.current();
+>>     }
+>>
+>>     function getBaseURI() public view returns (string memory) {
+>>         return _baseTokenURI;
+>>     }
+>>
+>>     function totalMinted() public view returns (uint256) {
+>>         return _tokenIdCounter.current();
 >>     }
 >> }
-  🗑️  Supprimé: tee.txt
-  🗑️  Supprimé: DIFF_REPORT.txt
-  🗑️  Supprimé: PROJECT_SHARE.txt
-(venv) PS D:\Web3Projects\devPipline> Write-Host "`n?? VALIDATION FINALE DU PROJET" -ForegroundColor Cyan
->> Write-Host "================================" -ForegroundColor Cyan
+>> '@ | Set-Content -Path "contracts\SimpleNFT.sol" -Encoding UTF8
 >>
->> # Test 1: Compilation
->> Write-Host "`n1. Compilation..." -ForegroundColor Yellow
+>> Write-Host "✅ Contrat SimpleNFT corrigé pour OpenZeppelin v4.9.5" -ForegroundColor Green
+✅ Contrat SimpleNFT corrigé pour OpenZeppelin v4.9.5
+(venv) PS D:\Web3Projects\devPipline> # Correction TOUT-EN-UN
+>> Write-Host "🚀 CORRECTION FINALE DU PROJET" -ForegroundColor Cyan
+>> Write-Host "=================================" -ForegroundColor Cyan
+>>
+>> # 1. Vérifier Node.js
+>> Write-Host "`n1. 🔍 Vérification Node.js..." -ForegroundColor Gray
+>> node --version
+>>
+>> # 2. Nettoyer et réinstaller
+>> Write-Host "`n2. 🧹 Nettoyage..."  -ForegroundColor Yellow
+>> Remove-Item -Path "node_modules", "package-lock.json" -Recurse -Force -ErrorAction SilentlyContinue
+>>
+>> # 3. package.json optimal
+>> Write-Host "`n3. ⚙️  Configuration optimale..." -ForegroundColor Yellow
+>> @'
+>> {
+>>   "name": "nftmarketplace",
+>>   "version": "1.0.0",
+>>   "type": "module",
+>>   "scripts": {
+>>     "compile": "hardhat compile",
+>>     "test": "hardhat test",
+>>     "node": "hardhat node",
+>>     "deploy": "hardhat run scripts/deploy.js"
+>>   },
+>>   "devDependencies": {
+>>     "hardhat": "^3.0.0",
+>>     "@nomicfoundation/hardhat-ethers": "^4.0.0",
+>>     "dotenv": "^16.0.0",
+>>     "ethers": "^6.0.0"
+>>   },
+>>   "dependencies": {
+>>     "@openzeppelin/contracts": "^4.9.5"
+>>   }
+>> }
+>> '@ | Set-Content -Path "package.json" -Encoding UTF8
+>>
+>> # 4. Installer
+>> Write-Host "`n4. 📦 Installation..." -ForegroundColor Yellow
+>> npm install --legacy-peer-deps
+>>
+>> # 5. Configuration Hardhat simple
+>> Write-Host "`n5. 🔧 Configuration Hardhat..." -ForegroundColor Yellow
+>> @'
+>> import "@nomicfoundation/hardhat-ethers";
+>> import * as dotenv from "dotenv";
+>>
+>> dotenv.config();
+>>
+>> const config = {
+>>   solidity: "0.8.20",
+>>   networks: {
+>>     hardhat: {
+>>       type: "edr-simulated"
+>>     }
+>>   }
+>> };
+>>
+>> export default config;
+>> '@ | Set-Content -Path "hardhat.config.js" -Encoding UTF8
+>>
+>> # 6. TEST FINAL
+>> Write-Host "`n6. 🧪 TEST FINAL..."  -ForegroundColor Cyan
 >> npx hardhat compile
->> $compileSuccess = $LASTEXITCODE -eq 0
-
-🔍 VALIDATION FINALE DU PROJET
-================================
-
-1. Compilation...
-
-WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
-Please upgrade to 22.10.0 or a later LTS version (even major version number)
-
-Hardhat only supports ESM projects.
-
-Please make sure you have `"type": "module"` in your package.json.
-
-You can set it automatically by running:
-
-npm pkg set type="module"
-
-(venv) PS D:\Web3Projects\devPipline> # Test 2: Tests
->> Write-Host "`n2. Tests..." -ForegroundColor Yellow
->> if (Test-Path "test/SimpleNFT.test.js") {
->>     npx hardhat test
->>     $testSuccess = $LASTEXITCODE -eq 0
->> } else {
->>     Write-Host "  ??  Aucun test trouvé" -ForegroundColor Gray
->>     $testSuccess = $true
->> }
-
-2. Tests...
-
-WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
-Please upgrade to 22.10.0 or a later LTS version (even major version number)
-
-Hardhat only supports ESM projects.
-
-Please make sure you have `"type": "module"` in your package.json.
-
-You can set it automatically by running:
-
-npm pkg set type="module"
-
-(venv) PS D:\Web3Projects\devPipline> # Test 3: Déploiement local
->> Write-Host "`n3. Déploiement local..." -ForegroundColor Yellow
->> try {
->>     # Démarrer noud en arrière-plan
->>     $nodeJob = Start-Job -ScriptBlock {
->>         cd $using:PWD
->>         npx hardhat node --network hardhat 2>&1
->>     }
 >>
+>> if ($LASTEXITCODE -eq 0) {
+>>     Write-Host "`n🎉 🎉 🎉 SUCCÈS TOTAL !" -ForegroundColor Green
+>>     Write-Host "VOTRE PROJET COMPILE PARFAITEMENT" -ForegroundColor Cyan
+>>
+>>     Write-Host "`n📋 Configuration validée :" -ForegroundColor White
+>>     Write-Host "• Node.js: $(node --version) ✅" -ForegroundColor Gray
+>>     Write-Host "• Hardhat: v3.1.3 ✅" -ForegroundColor Gray
+>>     Write-Host "• OpenZeppelin: v4.9.5 ✅" -ForegroundColor Gray
+>>     Write-Host "• Contrat SimpleNFT: ✅" -ForegroundColor Gray
+>>
+>>     # Configuration finale
+>>     Write-Host "`n⚙️  Configuration finale..." -ForegroundColor Yellow
+>>     @'
+>> import "@nomicfoundation/hardhat-ethers";
+>> import * as dotenv from "dotenv";
+>>
+>> dotenv.config();
+>>
+>> const config = {
+>>   solidity: {
+>>     version: "0.8.20",
+>>     settings: {
+>>       optimizer: {
+>>         enabled: true,
+>>         runs: 200
+>>       }
+>>     }
+>>   },
+>>   networks: {
+>>     hardhat: {
+>>       type: "edr-simulated",
+>>       chainId: 31337
+>>     },
+>>     localhost: {
+>>       url: "http://127.0.0.1:8545",
+>>       type: "http"
+>>     }
+>>   }
+>> };
+>>
+>> export default config;
+>> '@ | Set-Content -Path "hardhat.config.js" -Encoding UTF8
+>>
+>>     # Créer un script de déploiement
+>>     Write-Host "`n📜 Création script de déploiement..." -ForegroundColor Cyan
+>>     @'
+>> import hre from "hardhat";
+>>
+>> async function main() {
+>>   console.log("🚀 Déploiement SimpleNFT...");
+>>
+>>   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT");
+>>   const nft = await SimpleNFT.deploy(
+>>     "Simple NFT",
+>>     "SNFT",
+>>     "https://api.nftmarketplace.com/metadata/"
+>>   );
+>>
+>>   await nft.waitForDeployment();
+>>   const address = await nft.getAddress();
+>>
+>>   console.log(`✅ Contrat déployé à: ${address}`);
+>>   console.log(`📝 Name: ${await nft.name()}`);
+>>   console.log(`🎯 Symbol: ${await nft.symbol()}`);
+>>   console.log(`🔗 Base URI: ${await nft.getBaseURI()}`);
+>>   console.log(`🎫 Next Token ID: ${await nft.nextTokenId()}`);
+>>
+>>   return address;
+>> }
+>>
+>> main().catch((error) => {
+>>   console.error("💥 Erreur:", error);
+>>   process.exitCode = 1;
+>> });
+>> '@ | Set-Content -Path "scripts/deploy.js" -Encoding UTF8
+>>
+>>     # Tester le déploiement
+>>     Write-Host "`n🔗 Test déploiement local..." -ForegroundColor Yellow
+>>     npx hardhat node --network hardhat &
+>>     $nodePid = $!
 >>     Start-Sleep -Seconds 5
 >>
->>     # Déployer
->>     npx hardhat run scripts/deploy.js --network localhost 2>&1
->>     $deploySuccess = $LASTEXITCODE -eq 0
+>>     npx hardhat run scripts/deploy.js --network localhost
 >>
->>     # Arrêter le noud
->>     Stop-Job $nodeJob
->>     Remove-Job $nodeJob
+>>     Stop-Process -Id $nodePid -Force -ErrorAction SilentlyContinue
 >>
->> } catch {
->>     Write-Host "  ??  Test déploiement ignoré (noud occupé)" -ForegroundColor Gray
->>     $deploySuccess = $true
->> }
-
-3. Déploiement local...
-
-WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
-Please upgrade to 22.10.0 or a later LTS version (even major version number)
-
-Hardhat only supports ESM projects.
-
-Please make sure you have `"type": "module"` in your package.json.
-
-You can set it automatically by running:
-
-npm pkg set type="module"
-
-(venv) PS D:\Web3Projects\devPipline> # Résumé
->> Write-Host "`n" + ("="*50) -ForegroundColor Cyan
->> if ($compileSuccess -and $testSuccess -and $deploySuccess) {
->>     Write-Host "?? PROJET TOTALEMENT FONCTIONNEL !" -ForegroundColor Green
->>     Write-Host "="*50 -ForegroundColor Green
+>>     # Instructions finales
+>>     Write-Host "`n" + ("="*70) -ForegroundColor Green
+>>     Write-Host "🎯 PROJET NFT MARKETPLACE PRÊT POUR LE DÉVELOPPEMENT" -ForegroundColor Green
+>>     Write-Host "="*70 -ForegroundColor Green
 >>
->>     Write-Host "`n?? Structure finale:" -ForegroundColor White
->>     Get-ChildItem -Recurse | Where-Object { $_.PSIsContainer -eq $false } |
->>         Select-Object @{Name="Type";Expression={$_.Extension}}, Name |
->>         Sort-Object Type, Name | Format-Table -AutoSize
+>>     Write-Host "`n🚀 Commandes disponibles :" -ForegroundColor White
+>>     Write-Host "  npx hardhat compile             # Compiler" -ForegroundColor Gray
+>>     Write-Host "  npx hardhat test                # Tester" -ForegroundColor Gray
+>>     Write-Host "  npx hardhat node                # Nœud local" -ForegroundColor Gray
+>>     Write-Host "  npx hardhat run scripts/deploy.js --network localhost" -ForegroundColor Gray
 >>
->>     Write-Host "`n?? Prochaines étapes:" -ForegroundColor Cyan
->>     Write-Host "1. MODIFIEZ .env avec vos vraies clés API" -ForegroundColor Yellow
->>     Write-Host "2. Obtenez des ETH test Sepolia: https://sepoliafaucet.com/" -ForegroundColor Gray
->>     Write-Host "3. Déployez sur Sepolia: npx hardhat run scripts/deploy.js --network sepolia" -ForegroundColor Gray
->>     Write-Host "4. Développez le frontend dans un dossier séparé" -ForegroundColor Gray
+>>     Write-Host "`n📝 Pour ajouter Sepolia plus tard :" -ForegroundColor Cyan
+>>     Write-Host "1. Installez: npm install @nomicfoundation/hardhat-verify@next --legacy-peer-deps" -ForegroundColor Gray
+>>     Write-Host "2. Configurez .env avec ALCHEMY_API_KEY et PRIVATE_KEY" -ForegroundColor Gray
+>>     Write-Host "3. Ajoutez la config sepolia à hardhat.config.js" -ForegroundColor Gray
 >>
 >> } else {
->>     Write-Host "??  PROJET PRESQUE PRÊT - Problèmes mineurs" -ForegroundColor Yellow
->>     Write-Host "="*50 -ForegroundColor Yellow
+>>     Write-Host "`n❌ Diagnostic des erreurs..." -ForegroundColor Red
+>>
+>>     # Vérifier le contrat
+>>     Write-Host "`n🔍 Vérification du contrat..." -ForegroundColor Yellow
+>>     if (Test-Path "contracts\SimpleNFT.sol") {
+>>         # Compiler avec plus de détails
+>>         npx hardhat compile --verbose
+>>     } else {
+>>         Write-Host "Contrat SimpleNFT.sol non trouvé" -ForegroundColor Red
+>>     }
 >> }
+🚀 CORRECTION FINALE DU PROJET
+=================================
 
- + ==================================================
-⚠️  PROJET PRESQUE PRÊT - Problèmes mineurs
-= *50
-(venv) PS D:\Web3Projects\devPipline> npx hardhat run scripts/deploy.js --network sepolia
+1. 🔍 Vérification Node.js...
+v22.10.0
 
-WARNING: You are using Node.js 20.19.6 which is not supported by Hardhat.
-Please upgrade to 22.10.0 or a later LTS version (even major version number)
+2. 🧹 Nettoyage...
 
-Hardhat only supports ESM projects.
+3. ⚙️  Configuration optimale...
 
-Please make sure you have `"type": "module"` in your package.json.
+4. 📦 Installation...
 
-You can set it automatically by running:
+added 71 packages, and audited 72 packages in 4s
 
-npm pkg set type="module"
+20 packages are looking for funding
+  run `npm fund` for details
 
+found 0 vulnerabilities
+
+5. 🔧 Configuration Hardhat...
+
+6. 🧪 TEST FINAL...
+
+Warning: This declaration shadows an existing declaration.
+  --> .\contracts\SimpleNFT.sol:30:35:
+   |
+30 |     function safeMint(address to, string memory tokenURI)
+   |                                   ^^^^^^^^^^^^^^^^^^^^^^
+Note: The shadowed declaration is here:
+   --> .\contracts\SimpleNFT.sol:107:5:
+    |
+107 |     function tokenURI(uint256 tokenId)
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+Warning: This declaration shadows an existing declaration.
+  --> .\contracts\SimpleNFT.sol:52:36:
+   |
+52 |     function ownerMint(address to, string memory tokenURI)
+   |                                    ^^^^^^^^^^^^^^^^^^^^^^
+Note: The shadowed declaration is here:
+   --> .\contracts\SimpleNFT.sol:107:5:
+    |
+107 |     function tokenURI(uint256 tokenId)
+    |     ^ (Relevant source part starts here and spans across multiple lines).
+
+TypeError: Wrong argument count for modifier invocation: 1 arguments given but expected 0.
+  --> .\contracts\SimpleNFT.sol:26:28:
+   |
+26 |     ) ERC721(name, symbol) Ownable(msg.sender) {
+   |                            ^^^^^^^^^^^^^^^^^^^
+
+Error HHE910: Compilation failed
+
+For more info go to https://hardhat.org/HHE910 or run Hardhat with --show-stack-traces
+
+❌ Diagnostic des erreurs...
+
+🔍 Vérification du contrat...
+Error HHE504: Invalid option "--verbose". It is neither a valid global option nor associated with any task. Did you forget to add the task first, or did you misspell it?
+
+For more info go to https://hardhat.org/HHE504 or run Hardhat with --show-stack-traces
 (venv) PS D:\Web3Projects\devPipline>
