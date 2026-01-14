@@ -1,0 +1,96 @@
+graph TD
+    A[🎯 Exigences Initiales] --> B
+    
+    subgraph B[🔍 Phase 1: Analyse & Conception]
+        B1[Agent Spécificités Blockchain]
+        B2[Agent Conformité Crypto]
+        B3[Agent Architecture Web]
+        B4[Agent Bonnes Pratiques]
+        
+        B1 --> B5[Validation Blockchain]
+        B2 --> B6[Validation Réglementaire]
+        B3 --> B7[Validation Architecture]
+        B4 --> B8[Validation Standards]
+        
+        B5 --> C
+        B6 --> C
+        B7 --> C
+        B8 --> C
+    end
+    
+    C{📊 Gate 1: Validation Conception}
+    
+    C -- ✅ --> D
+    C -- ❌ --> B1
+    
+    subgraph D[⚙️ Phase 2: Développement Spécialisé]
+        D1[Agent Smart Contracts]
+        D2[Agent Frontend Web3]
+        D3[Agent Backend Blockchain]
+        D4[Agent Tests Blockchain]
+        
+        D1 --> D5[Solidity/Web3.js]
+        D2 --> D6[React/Vue Web3]
+        D3 --> D7[Node.js/Python Web3]
+        D4 --> D8[Tests Hardhat/Foundry]
+        
+        D5 --> E
+        D6 --> E
+        D7 --> E
+        D8 --> E
+    end
+    
+    E{🔧 Gate 2: Validation Code}
+    
+    E -- ✅ --> F
+    E -- ❌ --> D1
+    
+    subgraph F[🛡️ Phase 3: Sécurité & Audit]
+        F1[Agent Audit Smart Contracts]
+        F2[Agent Sécurité Web]
+        F3[Agent Sécurité Crypto]
+        F4[Agent Analyse Gas]
+        
+        F1 --> F5[Audit: Slither/Mythril]
+        F2 --> F6[Audit: OWASP/Web Security]
+        F3 --> F7[Audit: Cryptographie]
+        F4 --> F8[Optimisation Gas]
+        
+        F5 --> G
+        F6 --> G
+        F7 --> G
+        F8 --> G
+    end
+    
+    G{🛡️ Gate 3: Validation Sécurité}
+    
+    G -- ✅ --> H
+    G -- ❌ --> D1
+    
+    subgraph H[🚀 Phase 4: Performance & Optimisation]
+        H1[Agent Performance Blockchain]
+        H2[Agent Performance Web]
+        H3[Agent UX/UI Web3]
+        H4[Agent Monitoring]
+        
+        H1 --> H5[Benchmark Transactions]
+        H2 --> H6[Benchmark Frontend]
+        H3 --> H7[Tests Utilisateurs]
+        H4 --> H8[Alertes & Métriques]
+        
+        H5 --> I
+        H6 --> I
+        H7 --> I
+        H8 --> I
+    end
+    
+    I{📈 Gate 4: Validation Performance}
+    
+    I -- ✅ --> J[🚀 Déploiement Production]
+    I -- ❌ --> H1
+    
+    J --> K[🔄 Boucle d'Amélioration Continue]
+    K --> L[Collecte Feedback Production]
+    L --> M[Analyse Patterns]
+    M --> N[Évolution Best Practices]
+    N --> B1

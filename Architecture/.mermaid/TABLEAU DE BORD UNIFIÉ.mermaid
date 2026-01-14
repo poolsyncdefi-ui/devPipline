@@ -1,0 +1,61 @@
+graph TB
+    Dashboard[📊 Dashboard Multi-Agents] --> Categories
+    
+    subgraph Categories[🎯 Catégories de Validation]
+        C1[Blockchain]
+        C2[Sécurité]
+        C3[Performance]
+        C4[Best Practices]
+        C5[Conformité]
+    end
+    
+    C1 --> M1[Métriques Blockchain]
+    M1 --> M1a[Gas Usage: 142,000]
+    M1 --> M1b[TPS: 45]
+    M1 --> M1c[Latence: 2.3s]
+    
+    C2 --> M2[Métriques Sécurité]
+    M2 --> M2a[Vulnérabilités: 0]
+    M2 --> M2b[Audit Score: 98%]
+    M2 --> M2c[Security Patterns: 15/15]
+    
+    C3 --> M3[Métriques Performance]
+    M3 --> M3a[LCP: 1.2s]
+    M3 --> M3b[FID: 45ms]
+    M3 --> M3c[CLS: 0.05]
+    
+    C4 --> M4[Best Practices]
+    M4 --> M4a[Solidity: 95%]
+    M4 --> M4b[TypeScript: 92%]
+    M4 --> M4c[Web3 Patterns: 88%]
+    
+    C5 --> M5[Conformité]
+    M5 --> M5a[MICA: ✅]
+    M5 --> M5b[SEC: ⚠️]
+    M5 --> M5c[GDPR: ✅]
+    
+    M1 --> Trends[Tendances]
+    M2 --> Trends
+    M3 --> Trends
+    M4 --> Trends
+    M5 --> Trends
+    
+    Trends --> Recommendations[Recommandations]
+    
+    subgraph Recommendations[💡 Suggestions d'Amélioration]
+        R1[Optimiser gas: -15% possible]
+        R2[Ajouter 2 security patterns]
+        R3[Améliorer LCP: cible 1.0s]
+        R4[Mettre à jour vers Solidity 0.8.20]
+    end
+    
+    Recommendations --> Actions[Actions Prioritaires]
+    
+    Actions --> A1[[Sprint N: High Priority]]
+    Actions --> A2[[Sprint N+1: Medium Priority]]
+    Actions --> A3[[Backlog: Low Priority]]
+    
+    A1 --> Execution[Exécution Automatique]
+    Execution --> Agents[🔄 Retour aux Agents]
+    
+    Agents --> Dashboard

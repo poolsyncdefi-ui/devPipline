@@ -128,11 +128,11 @@ contract SimpleNFT is ERC721, ERC721Enumerable, ERC721URIStorage, Ownable {
         return _tokenIdCounter.current();
     }
     
-    function getBaseURI() public view returns (string memory) {
+//     function getBaseURI() public view returns (string memory) {  // Commenté car fonction en double
         return _baseTokenURI;
     }
     
-    function totalMinted() public view returns (uint256) {
+//     function totalMinted() public view returns (uint256) {  // Commenté car fonction en double
         return _tokenIdCounter.current();
     }
 }

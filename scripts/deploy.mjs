@@ -1,8 +1,7 @@
-// scripts/deploy.js - Version CommonJS
 import { ethers } from "hardhat";
 
 async function main() {
-  console.log("🚀 Déploiement du contrat SimpleNFT...");
+  console.log("🚀 Déploiement SimpleNFT (ESM)...");
   
   const SimpleNFT = await ethers.getContractFactory("SimpleNFT");
   const simpleNFT = await SimpleNFT.deploy(
@@ -14,11 +13,10 @@ async function main() {
   await simpleNFT.waitForDeployment();
   const address = await simpleNFT.getAddress();
   
-  console.log(`✅ SimpleNFT déployé à l'adresse : ${address}`);
+  console.log(`✅ SimpleNFT déployé à : ${address}`);
   console.log(` • Nom : ${await simpleNFT.name()}`);
   console.log(` • Symbole : ${await simpleNFT.symbol()}`);
-  console.log(` • URI de base : ${await simpleNFT.getBaseURI()}`);
-  console.log(` • Propriétaire : ${await simpleNFT.owner()}`);
+  console.log(` • Prochain Token ID : ${await simpleNFT.nextTokenId()}`);
   
   return address;
 }

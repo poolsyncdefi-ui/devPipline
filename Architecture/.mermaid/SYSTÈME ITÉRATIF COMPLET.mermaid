@@ -1,0 +1,77 @@
+flowchart TD
+    Start[🎯 Sprint N] --> Conception
+    
+    subgraph Conception[Phase 1: Conception Itérative]
+        C1[Agent Business] --> C2[Capture Exigences]
+        C2 --> C3[Priorisation]
+        C3 --> C4[Validation Stakeholders]
+        C4 --> C5{Évolution Architecture?}
+    end
+    
+    Conception --> C5
+    
+    C5 -- Non --> Dev[Phase 2: Développement]
+    C5 -- Oui --> ArchUpdate[Mise à jour Architecture]
+    ArchUpdate --> C6[📘 Doc: Décisions Architecture]
+    C6 --> Conception
+    
+    subgraph Dev[Phase 2: Développement Itératif]
+        D1[Agent Développement] --> D2[Génération Code]
+        D2 --> D3[Agent Sécurité]
+        D3 --> D4[Agent Conformité]
+        D4 --> D5[Tests Unitaires]
+        D5 --> D6{Validation Code Review}
+    end
+    
+    Dev --> D6
+    D6 -- ✅ --> Validation
+    D6 -- ❌ --> D7[Debug Auto + Ajustements]
+    D7 --> Dev
+    
+    subgraph Validation[Phase 3: Validation Continue]
+        V1[Agent Fonctionnel] --> V2[Tests E2E]
+        V2 --> V3[Agent Performance]
+        V3 --> V4[Benchmarks Gas/Perf]
+        V4 --> V5[Agent UX/UI]
+        V5 --> V6[Tests Utilisateurs]
+        V6 --> V7{Validation Complète?}
+    end
+    
+    Validation --> V7
+    V7 -- ✅ --> Prod[🚀 Déploiement Production]
+    V7 -- ❌ --> V8[Collecte Feedback]
+    V8 --> V9[Analyse Root Cause]
+    V9 --> V10{Impact Architecture?}
+    
+    V10 -- Oui --> ArchUpdate
+    V10 -- Non --> V11{Ajustements Mineurs}
+    V11 -- Code --> Dev
+    V11 -- Tests --> Validation
+    
+    Prod --> Monitor[Monitoring Production]
+    
+    subgraph Monitor[🔄 Boucle d'Amélioration]
+        M1[Agent Monitoring] --> M2[Collecte Métriques]
+        M2 --> M3[Analyse Performance]
+        M3 --> M4[Détection Anomalies]
+        M4 --> M5{Générer Évolutions}
+    end
+    
+    Monitor --> M5
+    M5 -- Nouvelle Fonctionnalité --> Conception
+    M5 -- Optimisation --> Dev
+    M5 -- Bug Critique --> V9
+    
+    subgraph Docs[📚 Documentation Auto-Enrichie]
+        DC1[Conception] --> DC2[📘 Exigences]
+        DC2 --> DC3[📘 Architecture]
+        DD1[Développement] --> DD2[📘 Code]
+        DD2 --> DD3[📘 Sécurité]
+        DV1[Validation] --> DV2[📘 Tests]
+        DV2 --> DV3[📘 Performance]
+        DM1[Monitoring] --> DM2[📘 Production]
+        DM2 --> DM3[📘 Métriques]
+    end
+    
+    Docs --> LiveDocs[📖 Documentation Vivante]
+    LiveDocs --> Conception

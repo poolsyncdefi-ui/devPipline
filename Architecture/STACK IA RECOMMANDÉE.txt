@@ -1,0 +1,15 @@
+ÉDITEUR PRINCIPAL: Cursor (gratuit)
+  ├── Pour Solidity: Codeium autocompletion
+  ├── Pour refactoring: cmd+K
+  └── Pour comprendre codebase: Ask (cmd+L)
+
+ASSISTANTS:
+  ├── Smart Contracts: Phind + Ollama local
+  ├── Frontend Web3: Claude 3.5 Sonnet
+  ├── Intégration: Phind (erreurs spécifiques)
+  └── UI: v0.dev (prototype) + Claude (code final)
+
+DEBUG WEB3:
+  ├── Erreurs Solidity: Warpcast AI
+  ├── Erreurs transactions: Phind
+  └── Erreurs frontend: Claude

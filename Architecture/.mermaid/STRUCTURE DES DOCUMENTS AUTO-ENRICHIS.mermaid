@@ -1,0 +1,46 @@
+graph LR
+    A[📖 Documentation Vivante] --> B[Version: Sprint N];
+    
+    B --> C[Architecture];
+    C --> C1[📘 Diagrammes Mermaid];
+    C --> C2[📘 Décisions Techniques];
+    C --> C3[📘 Évolutions Historique];
+    
+    B --> D[Conformité];
+    D --> D1[📘 Rapport MICA];
+    D --> D2[📘 Matrice Conformité];
+    D --> D3[📘 Évolutions Réglementaires];
+    
+    B --> E[Intégrations];
+    E --> E1[📘 APIs Documentation];
+    E --> E2[📘 Schémas d'Intégration];
+    E --> E3[📘 Tests d'Intégration];
+    
+    B --> F[Code];
+    F --> F1[📘 Documentation Code];
+    F --> F2[📘 Exemples d'Utilisation];
+    F --> F3[📘 Standards de Code];
+    
+    B --> G[Validation];
+    G --> G1[📘 Rapports de Tests];
+    G --> G2[📘 Benchmarks Performance];
+    G --> G3[📘 Feedback Utilisateurs];
+    
+    B --> H[Production];
+    H --> H1[📘 Métriques Live];
+    H --> H2[📘 Incidents & Résolutions];
+    H --> H3[📘 Évolution Performance];
+    
+    C3 --> I[🔄 Lien Vers Sprint N-1];
+    D3 --> I;
+    E3 --> I;
+    F3 --> I;
+    G3 --> I;
+    H3 --> I;
+    
+    I --> J[📈 Historique Complet];
+    J --> K[Analyse Tendances];
+    K --> L[Suggestions d'Amélioration];
+    
+    L --> M[Prochain Sprint];
+    M --> N[📖 Documentation Vivante<br/>Version: Sprint N+1];

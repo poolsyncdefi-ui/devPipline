@@ -1,0 +1,32 @@
+graph TB
+    A[Agent Intégrations] --> B{Type d'Intégration};
+    
+    B -- Blockchain --> C[Vérification Cross-Chain];
+    C --> D[Compatibilité EVM];
+    C --> E[Standards: ERC-20, 721, 1155];
+    C --> F[Oracles: Chainlink, Pyth];
+    
+    B -- Web2 --> G[APIs Traditionnelles];
+    G --> H[REST/GraphQL];
+    G --> I[WebSockets];
+    G --> J[Authentification];
+    
+    B -- Services --> K[Services Tiers];
+    K --> L[Wallets: MetaMask, WalletConnect];
+    K --> M[Indexers: The Graph, Covalent];
+    K --> N[IPFS/Storage];
+    
+    D --> O[Tests d'Intégration];
+    E --> O;
+    F --> O;
+    H --> O;
+    I --> O;
+    J --> O;
+    L --> O;
+    M --> O;
+    N --> O;
+    
+    O --> P[📘 Documentation APIs];
+    P --> Q[Schémas OpenAPI];
+    Q --> R[Exemples d'Intégration];
+    R --> S[Validation Automatisée];

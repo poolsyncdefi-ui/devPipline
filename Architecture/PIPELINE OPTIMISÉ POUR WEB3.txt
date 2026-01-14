@@ -1,0 +1,20 @@
+1. CONCEPTION
+   Claude 3.5 → Architecture complète
+
+2. DÉVELOPPEMENT CONTRATS
+   Cursor + Codeium → Écriture
+   Ollama local → Code sensible
+   Phind → Debug sécurité
+
+3. DÉVELOPPEMENT FRONT
+   v0.dev → Prototype UI
+   Claude → Composants complexes
+   Codeium → Autocomplétion
+
+4. INTÉGRATION
+   Phind → Erreurs blockchain
+   Claude → Scripts déploiement
+
+5. TESTS & AUDIT
+   Warpcast AI → Vérification sécurité
+   Claude → Tests unitaires

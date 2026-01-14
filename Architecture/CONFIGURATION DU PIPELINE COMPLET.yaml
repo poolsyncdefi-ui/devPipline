@@ -1,0 +1,58 @@
+# pipeline_config.yaml
+agents:
+  blockchain_specific:
+    enabled: true
+    models:
+      - "claude-3.5-sonnet"
+      - "local:blockchain-expert"
+    validation_rules: "rules/blockchain_specificity.md"
+    
+  smart_contract_security:
+    enabled: true
+    tools:
+      - "slither"
+      - "mythril"
+      - "solhint"
+      - "custom_audit_rules"
+    auto_fix: true
+    
+  web3_frontend:
+    enabled: true
+    frameworks:
+      - "react"
+      - "vue"
+      - "nextjs"
+    libraries:
+      - "wagmi"
+      - "viem"
+      - "rainbowkit"
+    
+  gas_optimization:
+    enabled: true
+    techniques:
+      - "storage_packing"
+      - "calldata_optimization"
+      - "assembly_inlining"
+    target_gas_reduction: 20%
+    
+  performance:
+    enabled: true
+    metrics:
+      blockchain:
+        - "transaction_latency"
+        - "gas_consumption"
+        - "throughput"
+      web:
+        - "core_web_vitals"
+        - "first_load"
+        - "interaction_ready"
+    
+  best_practices:
+    solidity:
+      style_guide: "solidity-style-guide.md"
+      patterns: "solidity-patterns.md"
+      standards: "erc-standards.md"
+    javascript:
+      eslint_config: "web3-eslint.json"
+      typescript: "tsconfig-strict.json"
+      patterns: "web3-js-patterns.md"

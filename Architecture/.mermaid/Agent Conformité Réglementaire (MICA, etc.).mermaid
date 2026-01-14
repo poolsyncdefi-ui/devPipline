@@ -1,0 +1,25 @@
+graph LR
+    A[Agent Conformité] --> B{Analyse Juridiction};
+    B -- UE --> C[📋 Règles MICA];
+    B -- USA --> D[📋 Règles SEC/FinCEN];
+    B -- Autre --> E[📋 Règles Locales];
+    
+    C --> F[Validation Smart Contracts];
+    D --> F;
+    E --> F;
+    
+    F --> G[Vérification KYC/AML];
+    F --> H[Vérification Token Classification];
+    F --> I[Vérification Reporting];
+    
+    G --> J[📘 Rapport Conformité];
+    H --> J;
+    I --> J;
+    
+    J --> K{Conforme?};
+    K -- Oui --> L[✅ Validation];
+    K -- Non --> M[🔧 Correction Auto];
+    
+    M --> N[Suggestions Correctives];
+    N --> O[Mise à jour Architecture];
+    O --> P[📘 Doc: Évolution Réglementaire];
