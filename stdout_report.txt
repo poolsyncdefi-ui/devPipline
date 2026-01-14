@@ -1,107 +1,47 @@
-(venv) PS D:\Web3Projects\devPipline> # Vérifiez s'il y a vraiment deux fichiers
->> Get-ChildItem -Path "*.mjs" -Recurse -File | Select-Object FullName
+(venv) PS D:\Web3Projects\devPipline> $env:NODE_OPTIONS="--openssl-legacy-provider"
+>> Get-Content hardhat.config.mjs  # Vérifiez le contenu
+>> npx hardhat --config hardhat.config.mjs compile
+import { HardhatUserConfig } from "hardhat/config";
 
-FullName
---------
-D:\Web3Projects\devPipline\node_modules\@adraffy\ens-normalize\dist\index-xnf.mjs
-D:\Web3Projects\devPipline\node_modules\@adraffy\ens-normalize\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\@ethersproject\providers\node_modules\ws\wrapper.mjs
-D:\Web3Projects\devPipline\node_modules\@jridgewell\resolve-uri\dist\resolve-uri.mjs
-D:\Web3Projects\devPipline\node_modules\@jridgewell\sourcemap-codec\dist\sourcemap-codec.mjs
-D:\Web3Projects\devPipline\node_modules\@jridgewell\trace-mapping\dist\trace-mapping.mjs
-D:\Web3Projects\devPipline\node_modules\acorn\dist\acorn.mjs
-D:\Web3Projects\devPipline\node_modules\acorn-walk\dist\walk.mjs
-D:\Web3Projects\devPipline\node_modules\array-back\index.mjs
-D:\Web3Projects\devPipline\node_modules\chai\index.mjs
-D:\Web3Projects\devPipline\node_modules\cliui\index.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\argv-parser.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\argv-tools.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\option-definition.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\option-definitions.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\option-flag.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\option.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\output-grouped.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\lib\output.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-args\index.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-usage\node_modules\array-back\index.mjs
-D:\Web3Projects\devPipline\node_modules\command-line-usage\node_modules\typical\index.mjs
-D:\Web3Projects\devPipline\node_modules\escalade\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\escalade\sync\index.mjs
-D:\Web3Projects\devPipline\node_modules\ethers\rollup.config.mjs
-D:\Web3Projects\devPipline\node_modules\fast-equals\dist\es\index.mjs
-D:\Web3Projects\devPipline\node_modules\fast-uri\benchmark\benchmark.mjs
-D:\Web3Projects\devPipline\node_modules\fast-uri\benchmark\equal.mjs
-D:\Web3Projects\devPipline\node_modules\fast-uri\benchmark\non-simple-domain.mjs
-D:\Web3Projects\devPipline\node_modules\fast-uri\benchmark\string-array-to-hex-stripped.mjs
-D:\Web3Projects\devPipline\node_modules\fast-uri\benchmark\ws-is-secure.mjs
-D:\Web3Projects\devPipline\node_modules\fastq\example.mjs
-D:\Web3Projects\devPipline\node_modules\find-replace\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\find-replace\index.mjs
-D:\Web3Projects\devPipline\node_modules\get-tsconfig\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\hardhat\node_modules\ws\wrapper.mjs
-D:\Web3Projects\devPipline\node_modules\js-yaml\dist\js-yaml.mjs
-D:\Web3Projects\devPipline\node_modules\json-stream-stringify\lib\esm\index.mjs
-D:\Web3Projects\devPipline\node_modules\json-stream-stringify\lib\esm\polyfill.mjs
-D:\Web3Projects\devPipline\node_modules\mocha\node_modules\diff\lib\index.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-angular.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-babel.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-espree.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-flow.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-glimmer.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-graphql.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-html.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-markdown.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-meriyah.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-postcss.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-typescript.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\parser-yaml.mjs
-D:\Web3Projects\devPipline\node_modules\prettier\esm\standalone.mjs
-D:\Web3Projects\devPipline\node_modules\qs\eslint.config.mjs
-D:\Web3Projects\devPipline\node_modules\resolve-pkg-maps\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\resolve.exports\dist\index.mjs
-D:\Web3Projects\devPipline\node_modules\table-layout\node_modules\array-back\index.mjs
-D:\Web3Projects\devPipline\node_modules\table-layout\node_modules\typical\index.mjs
-D:\Web3Projects\devPipline\node_modules\ts-node\esm\transpile-only.mjs
-D:\Web3Projects\devPipline\node_modules\ts-node\child-loader.mjs
-D:\Web3Projects\devPipline\node_modules\ts-node\esm.mjs
-D:\Web3Projects\devPipline\node_modules\tslib\tslib.es6.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\cjs\api\index.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\cjs\index.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\esm\api\index.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\esm\index.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\cli.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\client-BQVF1NaW.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\get-pipe-path-BHW2eJdv.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\index-7AaEi15b.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\index-gbaejti9.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\lexer-DQCqS3nf.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\loader.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\node-features-_8ZFwP_x.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\package-CeBgXWuR.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\patch-repl.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\preflight.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\register-B7jrtLTO.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\register-CFH5oNdT.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\repl.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\require-DQxpCAr4.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\suppress-warnings.mjs
-D:\Web3Projects\devPipline\node_modules\tsx\dist\temporary-directory-CwHp0_NW.mjs
-D:\Web3Projects\devPipline\node_modules\typical\index.mjs
-D:\Web3Projects\devPipline\node_modules\wordwrapjs\node_modules\typical\index.mjs
-D:\Web3Projects\devPipline\node_modules\ws\wrapper.mjs
-D:\Web3Projects\devPipline\node_modules\y18n\index.mjs
-D:\Web3Projects\devPipline\node_modules\yargs\helpers\helpers.mjs
-D:\Web3Projects\devPipline\node_modules\yargs\lib\platform-shims\browser.mjs
-D:\Web3Projects\devPipline\node_modules\yargs\lib\platform-shims\esm.mjs
-D:\Web3Projects\devPipline\node_modules\yargs\browser.mjs
-D:\Web3Projects\devPipline\node_modules\yargs\index.mjs
-D:\Web3Projects\devPipline\scripts\deploy-lock.mjs
-D:\Web3Projects\devPipline\scripts\deploy.mjs
-D:\Web3Projects\devPipline\scripts\interact.mjs
-D:\Web3Projects\devPipline\tests\simplenft-test.mjs
-D:\Web3Projects\devPipline\hardhat.config.mjs
+const config = {
+  solidity: {
+    version: "0.8.19",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
+  networks: {
+    hardhat: {
+      chainId: 1337
+    }
+  },
+  paths: {
+    sources: "./contracts",
+    tests: "./tests",
+    cache: "./cache",
+    artifacts: "./artifacts"
+  }
+};
 
+export default config;
+An unexpected error occurred:
+
+file:///D:/Web3Projects/devPipline/hardhat.config.mjs:1
+import { HardhatUserConfig } from "hardhat/config";
+         ^^^^^^^^^^^^^^^^^
+SyntaxError: The requested module 'hardhat/config' does not provide an export named 'HardhatUserConfig'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:177:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:260:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:543:26)
+    at async importConfigFileWithTsxFallback (D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\config-loading.ts:145:14)
+    at async importUserConfig (D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\config-loading.ts:80:20)
+    at async main (D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\cli\main.ts:130:24)
+    at async file:///D:/Web3Projects/devPipline/node_modules/hardhat/dist/src/cli.js:21:1
+
+If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
 (venv) PS D:\Web3Projects\devPipline> Write-Host "🔍 DIAGNOSTIC COMPLET" -ForegroundColor Cyan
 >> Write-Host "=" * 50
 >>
@@ -168,13 +108,13 @@ D:\Web3Projects\devPipline\hardhat.config.mjs
    PWD: D:\Web3Projects\devPipline
 
 2. FICHIER DE CONFIGURATION:
-   ✅ Existe (1021 octets)
+   ✅ Existe (406 octets)
    ✅ Syntaxe ESM correcte
 
 3. STRUCTURE:
    ✅ contracts (3 fichiers)
    ✅ scripts (7 fichiers)
-   ✅ tests (1 fichiers)
+   ✅ tests (2 fichiers)
 
 4. CONTRATS:
    ✅ Lock.sol - pragma solidity ^0.8.19;
@@ -185,301 +125,34 @@ D:\Web3Projects\devPipline\hardhat.config.mjs
    ✅ Version: 3.1.3
 
  + = * 50
-(venv) PS D:\Web3Projects\devPipline> $env:NODE_OPTIONS = "--openssl-legacy-provider"
->>
->> # Test 1: Version
->> npx hardhat --version
->>
->> # Test 2: Compilation avec config explicite
->> npx hardhat --config "$(Get-Location)\hardhat.config.mjs" compile
+(venv) PS D:\Web3Projects\devPipline> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+>> .\scripts\VersionsInstallees.ps1
+=== VERSIONS INSTALLÉES ===
+
+📦 Node.js & npm:
+v22.10.0
+10.9.0
+
+⚡ Hardhat:
 3.1.3
-An unexpected error occurred:
 
-SyntaxError: Unexpected identifier 'type'
-    at compileSourceTextModule (node:internal/modules/esm/utils:340:16)
-    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:102:18)
-    at #translate (node:internal/modules/esm/loader:433:12)
-    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:480:27)
-    at async ModuleJob._link (node:internal/modules/esm/module_job:112:19)
+📁 Dépendances principales:
+hardhat : 3.1.3
+@nomicfoundation/hardhat-toolbox : 2.0.2
+@openzeppelin/contracts : 4.9.6
+ethers : 6.16.0
+dotenv : 16.6.1
 
-If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
-(venv) PS D:\Web3Projects\devPipline> # Créez une config propre
->> @'
->> import { HardhatUserConfig } from "hardhat/config";
->> import "@nomicfoundation/hardhat-toolbox";
->>
->> const config = {
->>   solidity: {
->>     version: "0.8.19",
->>     settings: {
->>       optimizer: {
->>         enabled: true,
->>         runs: 200
->>       }
->>     }
->>   },
->>   networks: {
->>     hardhat: {
->>       chainId: 1337
->>     }
->>   },
->>   paths: {
->>     sources: "./contracts",
->>     tests: "./tests",  # Important: avec 's'
->>     cache: "./cache",
->>     artifacts: "./artifacts"
->>   }
->> };
->>
->> export default config;
->> '@ | Set-Content -Path "hardhat.config.mjs" -Encoding UTF8
-(venv) PS D:\Web3Projects\devPipline> $env:NODE_OPTIONS = "--openssl-legacy-provider"
->>
->> # Test 1: Version
->> npx hardhat --version
->>
->> # Test 2: Compilation avec config explicite
->> npx hardhat --config "$(Get-Location)\hardhat.config.mjs" compile
-3.1.3
-An unexpected error occurred:
-
-SyntaxError: Invalid or unexpected token
-    at compileSourceTextModule (node:internal/modules/esm/utils:340:16)
-    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:102:18)
-    at #translate (node:internal/modules/esm/loader:433:12)
-    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:480:27)
-    at async ModuleJob._link (node:internal/modules/esm/module_job:112:19)
-
-If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
+📊 Toutes les dépendances:
+  devpipeline@1.0.0 D:\Web3Projects\devPipline
+  +-- @nomicfoundation/hardhat-ethers@4.0.4 invalid: "^3.1.0" from the root project
+  +-- @nomicfoundation/hardhat-toolbox@2.0.2
+  +-- @nomicfoundation/hardhat-verify@3.0.8
+  +-- @openzeppelin/contracts@4.9.6
+  +-- @types/node@20.19.29
+  +-- chai@4.5.0
+  +-- dotenv@16.6.1
+  +-- ethers@6.16.0
+  +-- hardhat@3.1.3
+  `-- ts-node@10.9.2
 (venv) PS D:\Web3Projects\devPipline>
-(venv) PS D:\Web3Projects\devPipline> Write-Host "🔍 DIAGNOSTIC COMPLET" -ForegroundColor Cyan
->> Write-Host "=" * 50
->>
->> # 1. Variables
->> Write-Host "`n1. VARIABLES D'ENVIRONNEMENT:" -ForegroundColor Yellow
->> Write-Host "   NODE_OPTIONS: $env:NODE_OPTIONS"
->> Write-Host "   PWD: $(Get-Location)"
->>
->> # 2. Fichier de configuration
->> Write-Host "`n2. FICHIER DE CONFIGURATION:" -ForegroundColor Yellow
->> if (Test-Path "hardhat.config.mjs") {
->>     $size = (Get-Item "hardhat.config.mjs").Length
->>     Write-Host "   ✅ Existe ($size octets)" -ForegroundColor Green
->>
->>     # Vérifier le contenu
->>     $content = Get-Content "hardhat.config.mjs" -Raw
->>     if ($content -match "export default") {
->>         Write-Host "   ✅ Syntaxe ESM correcte" -ForegroundColor Green
->>     } else {
->>         Write-Host "   ❌ Mauvaise syntaxe (manque 'export default')" -ForegroundColor Red
->>     }
->> } else {
->>     Write-Host "   ❌ Fichier manquant" -ForegroundColor Red
->> }
->>
->> # 3. Structure des dossiers
->> Write-Host "`n3. STRUCTURE:" -ForegroundColor Yellow
->> @("contracts", "scripts", "tests") | ForEach-Object {
->>     if (Test-Path $_) {
->>         $count = (Get-ChildItem $_ -File | Measure-Object).Count
->>         Write-Host "   ✅ $_ ($count fichiers)" -ForegroundColor Green
->>     } else {
->>         Write-Host "   ❌ $_ manquant" -ForegroundColor Red
->>     }
->> }
->>
->> # 4. Contrats Solidity
->> Write-Host "`n4. CONTRATS:" -ForegroundColor Yellow
->> $solFiles = Get-ChildItem "contracts\*.sol" -ErrorAction SilentlyContinue
->> if ($solFiles) {
->>     $solFiles | ForEach-Object {
->>         $pragma = Get-Content $_.FullName | Select-String "pragma solidity"
->>         Write-Host "   ✅ $($_.Name) - $pragma" -ForegroundColor Green
->>     }
->> } else {
->>     Write-Host "   ❌ Aucun contrat trouvé dans contracts/" -ForegroundColor Red
->> }
->>
->> # 5. Test Hardhat
->> Write-Host "`n5. TEST HARHAT:" -ForegroundColor Yellow
->> try {
->>     $version = npx hardhat --version 2>&1
->>     Write-Host "   ✅ Version: $version" -ForegroundColor Green
->> } catch {
->>     Write-Host "   ❌ Erreur: $_" -ForegroundColor Red
->> }
->>
->> Write-Host "`n" + "=" * 50
-🔍 DIAGNOSTIC COMPLET
-= * 50
-
-1. VARIABLES D'ENVIRONNEMENT:
-   NODE_OPTIONS: --openssl-legacy-provider
-   PWD: D:\Web3Projects\devPipline
-
-2. FICHIER DE CONFIGURATION:
-   ✅ Existe (472 octets)
-   ✅ Syntaxe ESM correcte
-
-3. STRUCTURE:
-   ✅ contracts (3 fichiers)
-   ✅ scripts (7 fichiers)
-   ✅ tests (1 fichiers)
-
-4. CONTRATS:
-   ✅ Lock.sol - pragma solidity ^0.8.19;
-   ✅ SimpleNFT.sol - pragma solidity 0.8.19;
-   ✅ SimpleTest.sol - pragma solidity 0.8.19;
-
-5. TEST HARHAT:
-   ✅ Version: 3.1.3
-
- + = * 50
-(venv) PS D:\Web3Projects\devPipline> # Supprimez tout fichier config dupliqué
->> Get-ChildItem -Path "*.mjs", "*.js", "*.cjs" -Recurse -File |
->>     Where-Object { $_.Name -match "hardhat" -and $_.DirectoryName -ne $(Get-Location) } |
->>     ForEach-Object {
->>         Write-Host "Suppression: $($_.FullName)"
->>         Remove-Item $_.FullName -Force
->>     }
-Suppression: D:\Web3Projects\devPipline\backup_20260113_145819\hardhat.config.js
-Suppression: D:\Web3Projects\devPipline\backup_20260113_145906\hardhat.config.js
-Suppression: D:\Web3Projects\devPipline\backup_20260113_150001\hardhat.config.js
-Suppression: D:\Web3Projects\devPipline\node_modules\@nomicfoundation\hardhat-chai-matchers\internal\hardhatChaiMatchers.js
-Suppression: D:\Web3Projects\devPipline\node_modules\@nomicfoundation\hardhat-chai-matchers\internal\hardhatWaffleIncompatibilityCheck.js
-Suppression: D:\Web3Projects\devPipline\node_modules\@nomicfoundation\hardhat-ethers\dist\src\internal\hardhat-ethers-provider\hardhat-ethers-provider.js
-Suppression: D:\Web3Projects\devPipline\node_modules\@nomicfoundation\hardhat-ethers\dist\src\internal\hardhat-helpers\hardhat-helpers.js
-Suppression: D:\Web3Projects\devPipline\node_modules\@typechain\ethers-v5\dist\codegen\hardhat.js
-Suppression: D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\01-mocha-ethers-js\hardhat.config.js
-Suppression: D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\05-empty-hardhat-config-js\hardhat.config.js
-Suppression: D:\Web3Projects\devPipline\node_modules\solidity-coverage\plugins\hardhat.plugin.js
-Suppression: D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\02-mocha-ethers-js-esm\hardhat.config.cjs
-(venv) PS D:\Web3Projects\devPipline> Write-Host "🔍 DIAGNOSTIC COMPLET" -ForegroundColor Cyan
->> Write-Host "=" * 50
->>
->> # 1. Variables
->> Write-Host "`n1. VARIABLES D'ENVIRONNEMENT:" -ForegroundColor Yellow
->> Write-Host "   NODE_OPTIONS: $env:NODE_OPTIONS"
->> Write-Host "   PWD: $(Get-Location)"
->>
->> # 2. Fichier de configuration
->> Write-Host "`n2. FICHIER DE CONFIGURATION:" -ForegroundColor Yellow
->> if (Test-Path "hardhat.config.mjs") {
->>     $size = (Get-Item "hardhat.config.mjs").Length
->>     Write-Host "   ✅ Existe ($size octets)" -ForegroundColor Green
->>
->>     # Vérifier le contenu
->>     $content = Get-Content "hardhat.config.mjs" -Raw
->>     if ($content -match "export default") {
->>         Write-Host "   ✅ Syntaxe ESM correcte" -ForegroundColor Green
->>     } else {
->>         Write-Host "   ❌ Mauvaise syntaxe (manque 'export default')" -ForegroundColor Red
->>     }
->> } else {
->>     Write-Host "   ❌ Fichier manquant" -ForegroundColor Red
->> }
->>
->> # 3. Structure des dossiers
->> Write-Host "`n3. STRUCTURE:" -ForegroundColor Yellow
->> @("contracts", "scripts", "tests") | ForEach-Object {
->>     if (Test-Path $_) {
->>         $count = (Get-ChildItem $_ -File | Measure-Object).Count
->>         Write-Host "   ✅ $_ ($count fichiers)" -ForegroundColor Green
->>     } else {
->>         Write-Host "   ❌ $_ manquant" -ForegroundColor Red
->>     }
->> }
->>
->> # 4. Contrats Solidity
->> Write-Host "`n4. CONTRATS:" -ForegroundColor Yellow
->> $solFiles = Get-ChildItem "contracts\*.sol" -ErrorAction SilentlyContinue
->> if ($solFiles) {
->>     $solFiles | ForEach-Object {
->>         $pragma = Get-Content $_.FullName | Select-String "pragma solidity"
->>         Write-Host "   ✅ $($_.Name) - $pragma" -ForegroundColor Green
->>     }
->> } else {
->>     Write-Host "   ❌ Aucun contrat trouvé dans contracts/" -ForegroundColor Red
->> }
->>
->> # 5. Test Hardhat
->> Write-Host "`n5. TEST HARHAT:" -ForegroundColor Yellow
->> try {
->>     $version = npx hardhat --version 2>&1
->>     Write-Host "   ✅ Version: $version" -ForegroundColor Green
->> } catch {
->>     Write-Host "   ❌ Erreur: $_" -ForegroundColor Red
->> }
->>
->> Write-Host "`n" + "=" * 50
-🔍 DIAGNOSTIC COMPLET
-= * 50
-
-1. VARIABLES D'ENVIRONNEMENT:
-   NODE_OPTIONS: --openssl-legacy-provider
-   PWD: D:\Web3Projects\devPipline
-
-2. FICHIER DE CONFIGURATION:
-   ✅ Existe (472 octets)
-   ✅ Syntaxe ESM correcte
-
-3. STRUCTURE:
-   ✅ contracts (3 fichiers)
-   ✅ scripts (7 fichiers)
-   ✅ tests (1 fichiers)
-
-4. CONTRATS:
-   ✅ Lock.sol - pragma solidity ^0.8.19;
-   ✅ SimpleNFT.sol - pragma solidity 0.8.19;
-   ✅ SimpleTest.sol - pragma solidity 0.8.19;
-
-5. TEST HARHAT:
-   ✅ Version: 3.1.3
-
- + = * 50
-(venv) PS D:\Web3Projects\devPipline> $env:NODE_OPTIONS = "--openssl-legacy-provider"
->>
->> # Test 1: Version
->> npx hardhat --version
->>
->> # Test 2: Compilation avec config explicite
->> npx hardhat --config "$(Get-Location)\hardhat.config.mjs" compile
-3.1.3
-An unexpected error occurred:
-
-SyntaxError: Invalid or unexpected token
-    at compileSourceTextModule (node:internal/modules/esm/utils:340:16)
-    at ModuleLoader.moduleStrategy (node:internal/modules/esm/translators:102:18)
-    at #translate (node:internal/modules/esm/loader:433:12)
-    at ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:480:27)
-    at async ModuleJob._link (node:internal/modules/esm/module_job:112:19)
-
-If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
-(venv) PS D:\Web3Projects\devPipline> # Créez un test minimal
->> cd $env:TEMP
->> mkdir test-hardhat
->> cd test-hardhat
->>
->> # Config minimale
->> @'
->> import { HardhatUserConfig } from "hardhat/config";
->> const config = { solidity: "0.8.19" };
->> export default config;
->> '@ | Out-File "hardhat.config.mjs"
->>
->> # Testez
->> npx hardhat --version
-
-    Directory: C:\Users\elega\AppData\Local\Temp
-
-Mode                 LastWriteTime         Length Name
-----                 -------------         ------ ----
-d----          14/01/2026    16:16                test-hardhat
-3.1.3
-
-(venv) PS C:\Users\elega\AppData\Local\Temp\test-hardhat> npx hardhat --config hardhat.config.mjs compile
-Error HHE22: Trying to use a non-local installation of Hardhat, which is not supported.
-
-Please install Hardhat locally using pnpm, npm or yarn, and try again.
-
-For more info go to https://hardhat.org/HHE22 or run Hardhat with --show-stack-traces

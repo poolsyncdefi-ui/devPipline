@@ -8,7 +8,6 @@
     "node": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat node",
     "compile": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat compile",
     "test": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat test"
-
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^3.1.0",
