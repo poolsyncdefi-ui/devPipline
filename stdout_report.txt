@@ -1,47 +1,234 @@
-(venv) PS D:\Web3Projects\devPipline> $env:NODE_OPTIONS="--openssl-legacy-provider"
->> Get-Content hardhat.config.mjs  # Vérifiez le contenu
->> npx hardhat --config hardhat.config.mjs compile
-import { HardhatUserConfig } from "hardhat/config";
+(venv) PS D:\Web3Projects\devPipline> # 1. Nettoyage (doit fonctionner maintenant)
+>> npx hardhat clean
+>>
+>> # 2. Vérifier la structure
+>> npx hardhat --help
+Hardhat only supports ESM projects.
 
-const config = {
-  solidity: {
-    version: "0.8.19",
-    settings: {
-      optimizer: {
-        enabled: true,
-        runs: 200
-      }
-    }
-  },
-  networks: {
-    hardhat: {
-      chainId: 1337
-    }
-  },
-  paths: {
-    sources: "./contracts",
-    tests: "./tests",
-    cache: "./cache",
-    artifacts: "./artifacts"
-  }
-};
+Please make sure you have `"type": "module"` in your package.json.
 
-export default config;
-An unexpected error occurred:
+You can set it automatically by running:
 
-file:///D:/Web3Projects/devPipline/hardhat.config.mjs:1
-import { HardhatUserConfig } from "hardhat/config";
-         ^^^^^^^^^^^^^^^^^
-SyntaxError: The requested module 'hardhat/config' does not provide an export named 'HardhatUserConfig'
-    at ModuleJob._instantiate (node:internal/modules/esm/module_job:177:21)
-    at async ModuleJob.run (node:internal/modules/esm/module_job:260:5)
-    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:543:26)
-    at async importConfigFileWithTsxFallback (D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\config-loading.ts:145:14)
-    at async importUserConfig (D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\config-loading.ts:80:20)
-    at async main (D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\cli\main.ts:130:24)
-    at async file:///D:/Web3Projects/devPipline/node_modules/hardhat/dist/src/cli.js:21:1
+npm pkg set type="module"
 
-If you think this is a bug in Hardhat, please report it here: https://hardhat.org/report-bug
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> npx hardhat node
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> npx hardhat run scripts/deploy.js --network localhost
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> # Créez un test simple
+>> @'
+>> const { expect } = require("chai");
+>> const { ethers } = require("hardhat");
+>>
+>> describe("Lock Contract", function () {
+>>   it("Should deploy Lock contract", async function () {
+>>     const unlockTime = Math.floor(Date.now() / 1000) + 3600; // 1h dans futur
+>>
+>>     const Lock = await ethers.getContractFactory("Lock");
+>>     const lock = await Lock.deploy(unlockTime, {
+>>       value: ethers.parseEther("0.01")
+>>     });
+>>
+>>     await lock.waitForDeployment();
+>>
+>>     expect(await lock.owner()).to.equal(await ethers.provider.getSigner(0).getAddress());
+>>   });
+>> });
+>> '@ | Out-File -FilePath "tests/lock.test.js" -Encoding UTF8
+(venv) PS D:\Web3Projects\devPipline> npx hardhat test
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> @'
+>> Write-Host "🚀 PIPELINE DE TEST COMPLET" -ForegroundColor Cyan
+>> Write-Host "=" * 50
+>>
+>> $env:NODE_OPTIONS = "--openssl-legacy-provider"
+>>
+>> # 1. Clean
+>> Write-Host "`n1. 🧹 Nettoyage..." -ForegroundColor Yellow
+>> try {
+>>     npx hardhat clean
+>>     Write-Host "   ✅ Succès" -ForegroundColor Green
+>> } catch {
+>>     Write-Host "   ⚠️  Clean échoué (normal si première fois)" -ForegroundColor Yellow
+>> }
+>>
+>> # 2. Compile
+>> Write-Host "`n2. 🔨 Compilation..." -ForegroundColor Yellow
+>> npx hardhat compile
+>> if ($LASTEXITCODE -eq 0) {
+>>     Write-Host "   ✅ Compilation réussie" -ForegroundColor Green
+>> } else {
+>>     Write-Host "   ❌ Échec compilation" -ForegroundColor Red
+>>     exit 1
+>> }
+>>
+>> # 3. Test
+>> Write-Host "`n3. 🧪 Tests unitaires..." -ForegroundColor Yellow
+>> npx hardhat test
+>> if ($LASTEXITCODE -eq 0) {
+>>     Write-Host "   ✅ Tests passés" -ForegroundColor Green
+>> } else {
+>>     Write-Host "   ⚠️  Tests échoués" -ForegroundColor Yellow
+>> }
+>>
+>> # 4. Déploiement local (si nœud disponible)
+>> Write-Host "`n4. 🚀 Test déploiement..." -ForegroundColor Yellow
+>> try {
+>>     # Vérifie si un nœud local tourne
+>>     $nodeRunning = Test-NetConnection -ComputerName localhost -Port 8545 -ErrorAction SilentlyContinue
+>>
+>>     if ($nodeRunning.TcpTestSucceeded) {
+>>         npx hardhat run scripts/deploy.js --network localhost 2>&1 | Select-String -Pattern "deployé|address|Error" -CaseSensitive
+>>         Write-Host "   ✅ Déploiement testé" -ForegroundColor Green
+>>     } else {
+>>         Write-Host "   ℹ️  Nœud local non démarré" -ForegroundColor Gray
+>>         Write-Host "   Pour tester: npx hardhat node (dans un autre terminal)" -ForegroundColor White
+>>     }
+>> } catch {
+>>     Write-Host "   ⚠️  Erreur déploiement: $_" -ForegroundColor Yellow
+>> }
+>>
+>> # 5. Rapport
+>> Write-Host "`n5. 📊 Rapport final..." -ForegroundColor Cyan
+>> if (Test-Path "artifacts/build-info") {
+>>     $artifacts = Get-ChildItem "artifacts/contracts" -Recurse -Filter "*.json" | Measure-Object
+>>     Write-Host "   • Contrats compilés: $($artifacts.Count) fichiers" -ForegroundColor Green
+>> }
+>>
+>> Write-Host "`n" + "=" * 50
+>> Write-Host "✅ PIPELINE TERMINÉ" -ForegroundColor Green
+>> Write-Host "`nProchaines étapes recommandées:" -ForegroundColor Cyan
+>> Write-Host "1. Démarrer un nœud: npx hardhat node" -ForegroundColor White
+>> Write-Host "2. Déployer: npx hardhat run scripts/deploy.js --network localhost" -ForegroundColor White
+>> Write-Host "3. Ajouter plus de tests dans tests/" -ForegroundColor White
+>> Write-Host "4. Configurer des réseaux de test (Sepolia)" -ForegroundColor White
+>> '@ | Out-File -FilePath "test-pipeline.ps1" -Encoding UTF8
+(venv) PS D:\Web3Projects\devPipline> # Rendez-le exécutable
+>> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+>>
+>> # Exécutez le pipeline
+>> .\test-pipeline.ps1
+🚀 PIPELINE DE TEST COMPLET
+= * 50
+
+1. 🧹 Nettoyage...
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+   ✅ Succès
+
+2. 🔨 Compilation...
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+   ❌ Échec compilation
+(venv) PS D:\Web3Projects\devPipline> # Créez un script d'interaction
+>> @'
+>> import { ethers } from "hardhat";
+>>
+>> async function main() {
+>>   // Adresse du contrat déployé localement
+>>   const SIMPLENFT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+>>
+>>   console.log("🔄 Interaction avec SimpleNFT...");
+>>
+>>   const [owner, user1] = await ethers.getSigners();
+>>   const SimpleNFT = await ethers.getContractFactory("SimpleNFT");
+>>   const simpleNFT = SimpleNFT.attach(SIMPLENFT_ADDRESS);
+>>
+>>   // 1. Vérifier les informations de base
+>>   console.log("📊 Informations contrat:");
+>>   console.log(` • Nom: ${await simpleNFT.name()}`);
+>>   console.log(` • Symbole: ${await simpleNFT.symbol()}`);
+>>   console.log(` • Supply total: ${await simpleNFT.totalSupply()}`);
+>>   console.log(` • Prix mint: ${ethers.formatEther(await simpleNFT.mintPrice())} ETH`);
+>>
+>>   // 2. Mint par le propriétaire (gratuit)
+>>   console.log("\n🆕 Mint par propriétaire...");
+>>   const tx1 = await simpleNFT.ownerMint(user1.address, "token-1.json");
+>>   await tx1.wait();
+>>   console.log(`✅ NFT minté pour ${user1.address}`);
+>>   console.log(` • Balance user1: ${await simpleNFT.balanceOf(user1.address)}`);
+>>   console.log(` • Token ID: ${await simpleNFT.nextTokenId()}`);
+>>
+>>   // 3. Mint payant (simulé)
+>>   console.log("\n💰 Mint payant (simulation)...");
+>>   const mintCost = await simpleNFT.mintPrice();
+>>
+>>   // Note: Pour tester vraiment, il faut envoyer des ETH
+>>   console.log(` • Coût requis: ${ethers.formatEther(mintCost)} ETH`);
+>>   console.log("ℹ️  Pour tester le mint payant, ajoutez des fonds au compte");
+>>
+>>   // 4. Changer le prix
+>>   console.log("\n🔧 Changement de prix...");
+>>   const newPrice = ethers.parseEther("0.02");
+>>   const tx2 = await simpleNFT.setMintPrice(newPrice);
+>>   await tx2.wait();
+>>   console.log(`✅ Nouveau prix: ${ethers.formatEther(await simpleNFT.mintPrice())} ETH`);
+>> }
+>>
+>> main().catch((error) => {
+>>   console.error("💥 ERREUR:", error);
+>>   process.exitCode = 1;
+>> });
+>> '@ | Out-File -FilePath "scripts/interact-local.mjs" -Encoding UTF8
+>>
+>> # Exécutez l'interaction
+>> npx hardhat run scripts/interact-local.mjs --network localhost
+Hardhat only supports ESM projects.
+
+Please make sure you have `"type": "module"` in your package.json.
+
+You can set it automatically by running:
+
+npm pkg set type="module"
+
+(venv) PS D:\Web3Projects\devPipline> # Vérifiez que les contrats ont pragma 0.8.19
+>> Get-ChildItem "contracts\*.sol" | ForEach-Object {
+>>     $pragma = Get-Content $_.FullName | Select-String "pragma solidity"
+>>     if ($pragma -notmatch "0\.8\.19") {
+>>         Write-Host "⚠️  $($_.Name) a un pragma incorrect: $pragma" -ForegroundColor Yellow
+>>     }
+>> }
 (venv) PS D:\Web3Projects\devPipline> Write-Host "🔍 DIAGNOSTIC COMPLET" -ForegroundColor Cyan
 >> Write-Host "=" * 50
 >>
@@ -108,13 +295,12 @@ If you think this is a bug in Hardhat, please report it here: https://hardhat.or
    PWD: D:\Web3Projects\devPipline
 
 2. FICHIER DE CONFIGURATION:
-   ✅ Existe (406 octets)
-   ✅ Syntaxe ESM correcte
+   ❌ Fichier manquant
 
 3. STRUCTURE:
    ✅ contracts (3 fichiers)
-   ✅ scripts (7 fichiers)
-   ✅ tests (2 fichiers)
+   ✅ scripts (8 fichiers)
+   ✅ tests (3 fichiers)
 
 4. CONTRATS:
    ✅ Lock.sol - pragma solidity ^0.8.19;
@@ -125,34 +311,153 @@ If you think this is a bug in Hardhat, please report it here: https://hardhat.or
    ✅ Version: 3.1.3
 
  + = * 50
-(venv) PS D:\Web3Projects\devPipline> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
->> .\scripts\VersionsInstallees.ps1
+(venv) PS D:\Web3Projects\devPipline> Get-Content hardhat.config.js
+require("@nomicfoundation/hardhat-ethers");
+require("@nomicfoundation/hardhat-chai-matchers");
+require("@nomicfoundation/hardhat-network-helpers");
+require("@nomicfoundation/hardhat-verify");
+require("hardhat-gas-reporter");
+require("solidity-coverage");
+
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
+  solidity: {
+    version: "0.8.19",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200
+      }
+    }
+  },
+  networks: {
+    hardhat: {
+      chainId: 1337
+    }
+  },
+  paths: {
+    sources: "./contracts",
+    tests: "./tests",
+    cache: "./cache",
+    artifacts: "./artifacts"
+  }
+};
+(venv) PS D:\Web3Projects\devPipline> # Vérifiez ce qui existe
+>> Get-ChildItem -Path "*.js", "*.mjs", "*.cjs" -File | Select-Object Name
+>>
+>> # Vérifiez la racine
+>> ls -File | Where-Object { $_.Name -match "hardhat|package" }
+
+Name
+----
+hardhat.config.js
+hardhat.config.js
+package-lock.json
+package.json
+
+(venv) PS D:\Web3Projects\devPipline> ls
+
+    Directory: D:\Web3Projects\devPipline
+
+Mode                 LastWriteTime         Length Name
+----                 -------------         ------ ----
+d----          09/01/2026    19:18                .agents
+d----          09/01/2026    19:18                .cursor
+d----          09/01/2026    19:18                .github
+d----          09/01/2026    19:18                .validation-gates
+d----          10/01/2026    14:31                agents
+d----          14/01/2026    16:15                backup_20260113_145819
+d----          14/01/2026    16:15                backup_20260113_145906
+d----          14/01/2026    16:15                backup_20260113_150001
+d----          09/01/2026    19:18                backups
+d----          09/01/2026    19:18                config
+d----          13/01/2026    21:15                contracts
+d----          09/01/2026    19:18                docs
+d----          09/01/2026    19:19                frontend
+d----          09/01/2026    19:18                logs
+d----          14/01/2026    17:34                node_modules
+d----          13/01/2026    14:58                pipeline
+d----          14/01/2026    17:40                scripts
+d----          14/01/2026    17:36                tests
+d----          09/01/2026    19:42                venv
+-a---          13/01/2026    19:05           1584 .env
+-a---          09/01/2026    19:18            526 .gitignore
+-a---          13/01/2026    19:11            181 dependencies_report.txt
+-a---          14/01/2026    16:46           1516 DIFF_REPORT.txt
+-a---          14/01/2026    17:32            670 hardhat.config.js
+-a---          14/01/2026    17:34         241687 package-lock.json
+-a---          14/01/2026    16:54            704 package.json
+-a---          14/01/2026    16:46         214721 PROJECT_SHARE.txt
+-a---          09/01/2026    21:12            272 requirements-agents-minimal.txt
+-a---          10/01/2026    14:34            449 requirements-agents.txt
+-a---          09/01/2026    21:27            272 requirements-core.txt
+-a---          13/01/2026    14:57          12195 Share_GithubV7.bat
+-a---          14/01/2026    17:38           5621 stdout_report.txt
+-a---          14/01/2026    17:37           2537 test-pipeline.ps1
+-a---          13/01/2026    20:37            440 tsconfig.json
+-a---          13/01/2026    19:11            159 version_report.txt
+
+(venv) PS D:\Web3Projects\devPipline> Write-Host "`n=== TOUTES LES DEPENDANCES ===" -ForegroundColor Magenta
+>> npm list --depth=0
+
+=== TOUTES LES DEPENDANCES ===
+devpipeline@1.0.0 D:\Web3Projects\devPipline
++-- @nomicfoundation/hardhat-chai-matchers@2.1.0
++-- @nomicfoundation/hardhat-ethers@3.1.3
++-- @nomicfoundation/hardhat-network-helpers@1.1.2
++-- @nomicfoundation/hardhat-verify@2.1.3
++-- @openzeppelin/contracts@4.9.6
++-- chai@4.5.0
++-- ethers@6.16.0
++-- hardhat-gas-reporter@1.0.10
++-- hardhat@3.1.3
+`-- solidity-coverage@0.8.17
+
+(venv) PS D:\Web3Projects\devPipline> Write-Host "`n=== HARHAT ===" -ForegroundColor Yellow
+>> try {
+>>     $hhVersion = npx hardhat --version
+>>     Write-Host "Hardhat: $hhVersion"
+>> } catch {
+>>     Write-Host "Hardhat: NON DISPONIBLE" -ForegroundColor Red
+>> }
+
+=== HARHAT ===
+Hardhat: 3.1.3
+(venv) PS D:\Web3Projects\devPipline> Write-Host "=== VERSIONS DE BASE ===" -ForegroundColor Cyan
+>> Write-Host "Node.js: $(node --version)"
+>> Write-Host "npm: $(npm --version)"
+>> Write-Host "npx: $(npx --version)"
+=== VERSIONS DE BASE ===
+Node.js: v22.10.0
+npm: 10.9.0
+npx: 10.9.0
+(venv) PS D:\Web3Projects\devPipline> # Voir le contenu du script
+>> Get-Content .\VersionsInstallees.ps1
+>>
+>> # OU l'exécuter ligne par ligne
+>> & {
+>>     Write-Host "=== VERSIONS INSTALLÉES ===" -ForegroundColor Cyan
+>>     Write-Host "`n📦 Node.js & npm:" -ForegroundColor Yellow
+>>     node --version
+>>     npm --version
+>>     # ... copiez-collez le reste du script
+>> }
+Get-Content:
+Line |
+   2 |  Get-Content .\VersionsInstallees.ps1
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     | Cannot find path 'D:\Web3Projects\devPipline\VersionsInstallees.ps1' because it does not exist.
 === VERSIONS INSTALLÉES ===
 
 📦 Node.js & npm:
 v22.10.0
 10.9.0
-
-⚡ Hardhat:
-3.1.3
-
-📁 Dépendances principales:
-hardhat : 3.1.3
-@nomicfoundation/hardhat-toolbox : 2.0.2
-@openzeppelin/contracts : 4.9.6
-ethers : 6.16.0
-dotenv : 16.6.1
-
-📊 Toutes les dépendances:
-  devpipeline@1.0.0 D:\Web3Projects\devPipline
-  +-- @nomicfoundation/hardhat-ethers@4.0.4 invalid: "^3.1.0" from the root project
-  +-- @nomicfoundation/hardhat-toolbox@2.0.2
-  +-- @nomicfoundation/hardhat-verify@3.0.8
-  +-- @openzeppelin/contracts@4.9.6
-  +-- @types/node@20.19.29
-  +-- chai@4.5.0
-  +-- dotenv@16.6.1
-  +-- ethers@6.16.0
-  +-- hardhat@3.1.3
-  `-- ts-node@10.9.2
+(venv) PS D:\Web3Projects\devPipline> Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+>> .\VersionsInstallees.ps1
+.\VersionsInstallees.ps1:
+Line |
+   2 |  .\VersionsInstallees.ps1
+     |  ~~~~~~~~~~~~~~~~~~~~~~~~
+     | The term '.\VersionsInstallees.ps1' is not recognized as a name of a cmdlet, function, script file, or executable program.
+Check the spelling of the name, or if a path was included, verify that the path is correct and try again.
 (venv) PS D:\Web3Projects\devPipline>

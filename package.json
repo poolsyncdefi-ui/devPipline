@@ -1,26 +1,25 @@
 {
   "name": "devpipeline",
   "version": "1.0.0",
-  "type": "module",
   "scripts": {
     "clean": "npx hardhat clean",
-    "deploy": "npx hardhat run scripts/deploy.mjs",
-    "node": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat node",
-    "compile": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat compile",
-    "test": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat test"
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "node": "npx hardhat node",
+    "deploy": "npx hardhat run scripts/deploy.js"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-ethers": "^3.1.0",
-    "@nomicfoundation/hardhat-toolbox": "^2.0.2",
-    "@nomicfoundation/hardhat-verify": "^3.0.8",
-    "@types/node": "^20.19.29",
-    "chai": "^4.3.7",
-    "dotenv": "^16.6.1",
-    "ethers": "^6.16.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
     "hardhat": "^3.1.3",
-    "ts-node": "^10.9.0"
+    "chai": "^4.3.7",
+    "ethers": "^6.10.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "solidity-coverage": "^0.8.5"
   },
   "dependencies": {
-    "@openzeppelin/contracts": "^4.9.6"
+    "@openzeppelin/contracts": "^4.9.5"
   }
 }
