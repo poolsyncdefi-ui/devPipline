@@ -3,12 +3,12 @@ STRUCTURED LENDING PROTOCOL - FULL PROJECT SHARE
 ============================================================================== 
 GitHub: poolsyncdefi-ui/devPipline 
 Repo URL: https://github.com/poolsyncdefi-ui/devPipline.git 
-Date: 13/01/2026 Time: 21:48:39,16 
+Date: 14/01/2026 Time: 14:46:59,53 
  
 [GIT INFORMATION] 
 ------------------------------------------------------------------------------ 
 Branch: master 
-Commit: c66a946 
+Commit: 1dee56b 
  
 [CONTRACTS DIRECTORY - *.sol files] 
 ============================================================================== 
@@ -17,7 +17,7 @@ FILE 0 | !filepath!
 Size: !filesize! bytes | Modified: !filemodified! 
 ------------------------------------------------------------------------------ 
 1: // SPDX-License-Identifier: MIT 
-2: pragma solidity 0.8.20; 
+2: pragma solidity 0.8.19; 
 3: contract Lock { 
 4:     uint256 public unlockTime; 
 5:     address public owner; 
@@ -44,7 +44,7 @@ FILE 0 | !filepath!
 Size: !filesize! bytes | Modified: !filemodified! 
 ------------------------------------------------------------------------------ 
 1: // SPDX-License-Identifier: MIT 
-2: pragma solidity 0.8.20; 
+2: pragma solidity 0.8.19; 
 3: import "@openzeppelin/contracts/token/ERC721/ERC721.sol"; 
 4: import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol"; 
 5: import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol"; 
@@ -185,7 +185,7 @@ FILE 0 | !filepath!
 Size: !filesize! bytes | Modified: !filemodified! 
 ------------------------------------------------------------------------------ 
 1: // SPDX-License-Identifier: MIT 
-2: pragma solidity 0.8.20; 
+2: pragma solidity 0.8.19; 
 3: contract SimpleTest { string public name = "Test"; } 
 ------------------------------------------------------------------------------ 
  
@@ -230,54 +230,55 @@ Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified!
 SCRIPT !script_count! | !filepath! 
 Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
 ------------------------------------------------------------------------------ 
-1: import hre from "hardhat"; 
-2: async function main() { 
-3:   console.log("🚀 Déploiement SimpleNFT (ESM)..."); 
-4:    
-5:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
-6:   const simpleNFT = await SimpleNFT.deploy( 
-7:     "Simple NFT", 
-8:     "SNFT", 
-9:     "https://api.nftmarketplace.com/metadata/" 
-10:   ); 
-11:    
-12:   await simpleNFT.waitForDeployment(); 
-13:   const address = await simpleNFT.getAddress(); 
-14:    
-15:   console.log(`✅ SimpleNFT déployé à: ${address}`); 
-16:   console.log(` • Name: ${await simpleNFT.name()}`); 
-17:   console.log(` • Symbol: ${await simpleNFT.symbol()}`); 
-18:    
-19:   // Vérification Etherscan (uniquement pour réseaux réels) 
-20:   if (hre.network.name == "localhost") { 
-21:     console.log("\n⏳ Attente de 30s avant vérification..."); 
-22:     await new Promise(resolve => setTimeout(resolve, 30000)); 
-23:      
-24:     try { 
-25:       await hre.run("verify:verify", { 
-26:         address: address, 
-27:         constructorArguments: [ 
-28:           "Simple NFT", 
-29:           "SNFT", 
-30:           "https://api.nftmarketplace.com/metadata/" 
-31:         ] 
-32:       }); 
-33:       console.log("✅ Contrat vérifié sur Etherscan"); 
-34:     } catch (error) { 
-35:       if (error.message.includes("Already Verified")) { 
-36:         console.log("ℹ️  Contrat déjà vérifié"); 
-37:       } else { 
-38:         console.log("⚠️  Échec vérification:", error.message); 
-39:       } 
-40:     } 
-41:   } 
-42:    
-43:   return address; 
-44: } 
-45: main().catch((error) => { 
-46:   console.error("💥 ERREUR:", error); 
-47:   process.exitCode = 1; 
-48: }); 
+1: // scripts/deploy.js - Version CommonJS 
+2: const hre = require("hardhat"); 
+3: async function main() { 
+4:   console.log("🚀 Déploiement SimpleNFT (ESM)..."); 
+5:    
+6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
+7:   const simpleNFT = await SimpleNFT.deploy( 
+8:     "Simple NFT", 
+9:     "SNFT", 
+10:     "https://api.nftmarketplace.com/metadata/" 
+11:   ); 
+12:    
+13:   await simpleNFT.waitForDeployment(); 
+14:   const address = await simpleNFT.getAddress(); 
+15:    
+16:   console.log(`✅ SimpleNFT déployé à: ${address}`); 
+17:   console.log(` • Name: ${await simpleNFT.name()}`); 
+18:   console.log(` • Symbol: ${await simpleNFT.symbol()}`); 
+19:    
+20:   // Vérification Etherscan (uniquement pour réseaux réels) 
+21:   if (hre.network.name == "localhost") { 
+22:     console.log("\n⏳ Attente de 30s avant vérification..."); 
+23:     await new Promise(resolve => setTimeout(resolve, 30000)); 
+24:      
+25:     try { 
+26:       await hre.run("verify:verify", { 
+27:         address: address, 
+28:         constructorArguments: [ 
+29:           "Simple NFT", 
+30:           "SNFT", 
+31:           "https://api.nftmarketplace.com/metadata/" 
+32:         ] 
+33:       }); 
+34:       console.log("✅ Contrat vérifié sur Etherscan"); 
+35:     } catch (error) { 
+36:       if (error.message.includes("Already Verified")) { 
+37:         console.log("ℹ️  Contrat déjà vérifié"); 
+38:       } else { 
+39:         console.log("⚠️  Échec vérification:", error.message); 
+40:       } 
+41:     } 
+42:   } 
+43:    
+44:   return address; 
+45: } 
+46: main().catch((error) => { 
+47:   console.error("💥 ERREUR:", error); 
+48:   process.exitCode = 1; 
+49: }); 
 ------------------------------------------------------------------------------ 
  
 SCRIPT !script_count! | !filepath! 
@@ -1388,40 +1389,6 @@ Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified!
  
 [TESTS DIRECTORY - *.js, *.txt files] 
 ============================================================================== 
- 
-TEST !test_count! | !filepath! 
-Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
------------------------------------------------------------------------------- 
-1: const { expect } = require("chai"); 
-2: const { ethers } = require("hardhat"); 
-3: describe("SimpleNFT", function () { 
-4:   let SimpleNFT, simpleNFT, owner, addr1; 
-5:    
-6:   beforeEach(async function () { 
-7:     [owner, addr1] = await ethers.getSigners(); 
-8:     SimpleNFT = await ethers.getContractFactory("SimpleNFT"); 
-9:     simpleNFT = await SimpleNFT.deploy( 
-10:       "Test NFT", 
-11:       "TNFT", 
-12:       "https://test.com/metadata/" 
-13:     ); 
-14:     await simpleNFT.waitForDeployment(); 
-15:   }); 
-16:    
-17:   it("Should have correct name and symbol", async function () { 
-18:     expect(await simpleNFT.name()).to.equal("Test NFT"); 
-19:     expect(await simpleNFT.symbol()).to.equal("TNFT"); 
-20:   }); 
-21:    
-22:   it("Should allow owner to mint", async function () { 
-23:     const tokenURI = "https://test.com/metadata/1.json"; 
-24:     await simpleNFT.ownerMint(addr1.address, tokenURI); 
-25:      
-26:     expect(await simpleNFT.ownerOf(0)).to.equal(addr1.address); 
-27:     expect(await simpleNFT.tokenURI(0)).to.equal(tokenURI); 
-28:   }); 
-29: }); 
------------------------------------------------------------------------------- 
  
 [PROJECT FILE STRUCTURE] 
 ============================================================================== 
@@ -3118,7 +3085,30 @@ D:\Web3Projects\devPipline\scripts\venv\Scripts\python.exe
 D:\Web3Projects\devPipline\scripts\venv\Scripts\pythonw.exe
  
 TESTS: 
-D:\Web3Projects\devPipline\test\SimpleNFT.test.js
+D:\Web3Projects\devPipline\node_modules\@streamparser\json\test
+D:\Web3Projects\devPipline\node_modules\@streamparser\json-node\test
+D:\Web3Projects\devPipline\node_modules\hardhat\dist\src\internal\builtin-plugins\test
+D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\builtin-plugins\test
+D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\01-mocha-ethers-js\test
+D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\02-mocha-ethers-js-esm\test
+D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\03-mocha-ethers-ts\test
+D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\04-mocha-viem-ts\test
+D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-3\01-node-test-runner-viem\test
+D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-3\02-mocha-ethers\test
+D:\Web3Projects\devPipline\node_modules\rfdc\test
+D:\Web3Projects\devPipline\pipeline\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\adodbapi\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\isapi\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\joblib\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\nltk\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32com\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32comext\axscript\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32comext\bits\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32comext\directsound\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32comext\propsys\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32comext\shell\test
+D:\Web3Projects\devPipline\venv\Lib\site-packages\win32comext\taskscheduler\test
  
 CONFIG FILES: 
 package-lock.json
@@ -3130,8 +3120,8 @@ tsconfig.json
 ============================================================================== 
 Total contract files: 3 
 Total script files: 12 
-Total test files: 1 
-Total code files: 16 
+Total test files: 0 
+Total code files: 15 
  
-Generated: 13/01/2026 21:48:40,59 
+Generated: 14/01/2026 14:47:01,13 
 ============================================================================== 
