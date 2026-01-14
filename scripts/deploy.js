@@ -1,4 +1,5 @@
-import hre from "hardhat";
+// scripts/deploy.js - Version CommonJS
+const hre = require("hardhat");
 
 async function main() {
   console.log("🚀 Déploiement SimpleNFT (ESM)...");
