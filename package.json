@@ -4,10 +4,11 @@
   "type": "module",
   "scripts": {
     "clean": "npx hardhat clean",
-    "compile": "npx hardhat compile",
-    "test": "npx hardhat test test/simplenft-test.mjs",
     "deploy": "npx hardhat run scripts/deploy.mjs",
-    "node": "npx hardhat node"
+    "node": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat node",
+    "compile": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat compile",
+    "test": "NODE_OPTIONS=--openssl-legacy-provider npx hardhat test"
+
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ethers": "^3.1.0",

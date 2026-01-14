@@ -3,12 +3,12 @@ STRUCTURED LENDING PROTOCOL - FULL PROJECT SHARE
 ============================================================================== 
 GitHub: poolsyncdefi-ui/devPipline 
 Repo URL: https://github.com/poolsyncdefi-ui/devPipline.git 
-Date: 14/01/2026 Time: 15:01:49,37 
+Date: 14/01/2026 Time: 15:56:27,87 
  
 [GIT INFORMATION] 
 ------------------------------------------------------------------------------ 
 Branch: master 
-Commit: 4ed9493 
+Commit: 3cd5b12 
  
 [CONTRACTS DIRECTORY - *.sol files] 
 ============================================================================== 
@@ -195,29 +195,22 @@ Size: !filesize! bytes | Modified: !filemodified!
 SCRIPT !script_count! | !filepath! 
 Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
 ------------------------------------------------------------------------------ 
-1: // scripts/deploy.js - Version CommonJS 
-2: const hre = require("hardhat"); 
-3: async function main() { 
-4:   console.log("🚀 Déploiement SimpleNFT..."); 
-5:    
-6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
-7:   const simpleNFT = await SimpleNFT.deploy( 
-8:     "Simple NFT", 
-9:     "SNFT", 
-10:     "https://api.nftmarketplace.com/metadata/" 
-11:   ); 
-12:    
-13:   await simpleNFT.waitForDeployment(); 
-14:   const address = await simpleNFT.getAddress(); 
-15:    
-16:   console.log(`✅ SimpleNFT déployé à: ${address}`); 
-17:   console.log(` • Name: ${await simpleNFT.name()}`); 
-18:   console.log(` • Symbol: ${await simpleNFT.symbol()}`); 
-19: } 
-20: main().catch((error) => { 
-21:   console.error("💥 ERREUR:", error); 
-22:   process.exitCode = 1; 
-23: }); 
+1: === RAPPORT DE VERSIONS === 
+2: Date: 2026-01-14 15:54:19 
+3: Node.js: v22.10.0 
+4: npm: 10.9.0 
+5: DEPENDANCES: 
+6: devpipeline@1.0.0 D:\Web3Projects\devPipline 
+7: +-- @nomicfoundation/hardhat-ethers@4.0.4 invalid: "3.1.0" from the root project 
+8: +-- @nomicfoundation/hardhat-toolbox@2.0.2 
+9: +-- @nomicfoundation/hardhat-verify@3.0.8 
+10: +-- @openzeppelin/contracts@4.9.6 
+11: +-- @types/node@20.19.29 
+12: +-- chai@4.5.0 
+13: +-- dotenv@16.6.1 
+14: +-- ethers@6.16.0 
+15: +-- hardhat@3.1.3 
+16: `-- ts-node@10.9.2 
 ------------------------------------------------------------------------------ 
  
 SCRIPT !script_count! | !filepath! 
@@ -1184,8 +1177,12 @@ D:\Web3Projects\devPipline\contracts\SimpleTest.sol
 SCRIPTS: 
 D:\Web3Projects\devPipline\scripts\Activate.ps1
 D:\Web3Projects\devPipline\scripts\check_env.py
-D:\Web3Projects\devPipline\scripts\deploy.js
+D:\Web3Projects\devPipline\scripts\deploy-lock.mjs
+D:\Web3Projects\devPipline\scripts\deploy.mjs
+D:\Web3Projects\devPipline\scripts\interact.mjs
 D:\Web3Projects\devPipline\scripts\venv
+D:\Web3Projects\devPipline\scripts\VersionsInstallees.ps1
+D:\Web3Projects\devPipline\scripts\versions_report.txt
 D:\Web3Projects\devPipline\scripts\venv\Include
 D:\Web3Projects\devPipline\scripts\venv\Lib
 D:\Web3Projects\devPipline\scripts\venv\pyvenv.cfg
@@ -2865,8 +2862,37 @@ D:\Web3Projects\devPipline\scripts\venv\Scripts\python.exe
 D:\Web3Projects\devPipline\scripts\venv\Scripts\pythonw.exe
  
 TESTS: 
+D:\Web3Projects\devPipline\node_modules\@ethersproject\json-wallets\node_modules\aes-js\test
+D:\Web3Projects\devPipline\node_modules\@solidity-parser\parser\dist\test
 D:\Web3Projects\devPipline\node_modules\@streamparser\json\test
 D:\Web3Projects\devPipline\node_modules\@streamparser\json-node\test
+D:\Web3Projects\devPipline\node_modules\available-typed-arrays\test
+D:\Web3Projects\devPipline\node_modules\brorand\test
+D:\Web3Projects\devPipline\node_modules\buffer-xor\test
+D:\Web3Projects\devPipline\node_modules\call-bind\test
+D:\Web3Projects\devPipline\node_modules\call-bind-apply-helpers\test
+D:\Web3Projects\devPipline\node_modules\call-bound\test
+D:\Web3Projects\devPipline\node_modules\cipher-base\test
+D:\Web3Projects\devPipline\node_modules\concat-map\test
+D:\Web3Projects\devPipline\node_modules\death\test
+D:\Web3Projects\devPipline\node_modules\deep-is\test
+D:\Web3Projects\devPipline\node_modules\define-data-property\test
+D:\Web3Projects\devPipline\node_modules\difflib\test
+D:\Web3Projects\devPipline\node_modules\dunder-proto\test
+D:\Web3Projects\devPipline\node_modules\es-define-property\test
+D:\Web3Projects\devPipline\node_modules\es-errors\test
+D:\Web3Projects\devPipline\node_modules\es-object-atoms\test
+D:\Web3Projects\devPipline\node_modules\es-set-tostringtag\test
+D:\Web3Projects\devPipline\node_modules\eth-gas-reporter\mock\test
+D:\Web3Projects\devPipline\node_modules\ethjs-unit\node_modules\bn.js\test
+D:\Web3Projects\devPipline\node_modules\fast-uri\test
+D:\Web3Projects\devPipline\node_modules\fastq\test
+D:\Web3Projects\devPipline\node_modules\flat\test
+D:\Web3Projects\devPipline\node_modules\for-each\test
+D:\Web3Projects\devPipline\node_modules\function-bind\test
+D:\Web3Projects\devPipline\node_modules\get-intrinsic\test
+D:\Web3Projects\devPipline\node_modules\get-proto\test
+D:\Web3Projects\devPipline\node_modules\gopd\test
 D:\Web3Projects\devPipline\node_modules\hardhat\dist\src\internal\builtin-plugins\test
 D:\Web3Projects\devPipline\node_modules\hardhat\src\internal\builtin-plugins\test
 D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\01-mocha-ethers-js\test
@@ -2875,7 +2901,40 @@ D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\03-mocha-eth
 D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-2\04-mocha-viem-ts\test
 D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-3\01-node-test-runner-viem\test
 D:\Web3Projects\devPipline\node_modules\hardhat\templates\hardhat-3\02-mocha-ethers\test
+D:\Web3Projects\devPipline\node_modules\has-property-descriptors\test
+D:\Web3Projects\devPipline\node_modules\has-symbols\test
+D:\Web3Projects\devPipline\node_modules\has-tostringtag\test
+D:\Web3Projects\devPipline\node_modules\hash.js\test
+D:\Web3Projects\devPipline\node_modules\heap\test
+D:\Web3Projects\devPipline\node_modules\hmac-drbg\test
+D:\Web3Projects\devPipline\node_modules\is-callable\test
+D:\Web3Projects\devPipline\node_modules\is-typed-array\test
+D:\Web3Projects\devPipline\node_modules\isexe\test
+D:\Web3Projects\devPipline\node_modules\math-intrinsics\test
+D:\Web3Projects\devPipline\node_modules\minimalistic-crypto-utils\test
+D:\Web3Projects\devPipline\node_modules\minimist\test
+D:\Web3Projects\devPipline\node_modules\node-emoji\test
+D:\Web3Projects\devPipline\node_modules\nopt\test
+D:\Web3Projects\devPipline\node_modules\number-to-bn\node_modules\bn.js\test
+D:\Web3Projects\devPipline\node_modules\object-inspect\test
+D:\Web3Projects\devPipline\node_modules\ordinal\test
+D:\Web3Projects\devPipline\node_modules\possible-typed-array-names\test
+D:\Web3Projects\devPipline\node_modules\qs\test
+D:\Web3Projects\devPipline\node_modules\resolve\test
 D:\Web3Projects\devPipline\node_modules\rfdc\test
+D:\Web3Projects\devPipline\node_modules\sha.js\test
+D:\Web3Projects\devPipline\node_modules\side-channel\test
+D:\Web3Projects\devPipline\node_modules\side-channel-list\test
+D:\Web3Projects\devPipline\node_modules\side-channel-map\test
+D:\Web3Projects\devPipline\node_modules\side-channel-weakmap\test
+D:\Web3Projects\devPipline\node_modules\solidity-coverage\node_modules\@solidity-parser\parser\dist\test
+D:\Web3Projects\devPipline\node_modules\source-map\test
+D:\Web3Projects\devPipline\node_modules\sprintf-js\test
+D:\Web3Projects\devPipline\node_modules\sync-request\test
+D:\Web3Projects\devPipline\node_modules\typed-array-buffer\test
+D:\Web3Projects\devPipline\node_modules\typedarray\test
+D:\Web3Projects\devPipline\node_modules\which-typed-array\test
+D:\Web3Projects\devPipline\node_modules\wordwrap\test
 D:\Web3Projects\devPipline\pipeline\test
 D:\Web3Projects\devPipline\venv\Lib\site-packages\adodbapi\test
 D:\Web3Projects\devPipline\venv\Lib\site-packages\isapi\test
@@ -2903,5 +2962,5 @@ Total script files: 10
 Total test files: 0 
 Total code files: 13 
  
-Generated: 14/01/2026 15:01:50,81 
+Generated: 14/01/2026 15:56:29,40 
 ============================================================================== 
