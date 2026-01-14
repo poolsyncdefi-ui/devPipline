@@ -1,5 +1,4 @@
 import { HardhatUserConfig } from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
 
 const config = {
   solidity: {
@@ -18,7 +17,7 @@ const config = {
   },
   paths: {
     sources: "./contracts",
-    tests: "./tests",  # Important: avec 's'
+    tests: "./tests",
     cache: "./cache",
     artifacts: "./artifacts"
   }
