@@ -1,5 +1,6 @@
 // hardhat.config.js - Version CommonJS
-require("@nomicfoundation/hardhat-toolbox");
+import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-toolbox";
 
 const config = {
   solidity: {

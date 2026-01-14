@@ -3,12 +3,12 @@ STRUCTURED LENDING PROTOCOL - FULL PROJECT SHARE
 ============================================================================== 
 GitHub: poolsyncdefi-ui/devPipline 
 Repo URL: https://github.com/poolsyncdefi-ui/devPipline.git 
-Date: 14/01/2026 Time: 14:46:59,53 
+Date: 14/01/2026 Time: 15:01:49,37 
  
 [GIT INFORMATION] 
 ------------------------------------------------------------------------------ 
 Branch: master 
-Commit: 1dee56b 
+Commit: 4ed9493 
  
 [CONTRACTS DIRECTORY - *.sol files] 
 ============================================================================== 
@@ -195,45 +195,10 @@ Size: !filesize! bytes | Modified: !filemodified!
 SCRIPT !script_count! | !filepath! 
 Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
 ------------------------------------------------------------------------------ 
-1: const hre = require("hardhat"); 
-2: async function main() { 
-3:   console.log("🚀 Déploiement du contrat SimpleNFT (Hardhat v2)..."); 
-4:    
-5:   // Récupérer le contrat - syntaxe v2 
-6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
-7:    
-8:   // Déployer avec paramètres 
-9:   const simpleNFT = await SimpleNFT.deploy( 
-10:     "Simple NFT", 
-11:     "SNFT", 
-12:     "https://api.nftmarketplace.com/metadata/" 
-13:   ); 
-14:    
-15:   // Attendre le déploiement - syntaxe v2 
-16:   await simpleNFT.deployed(); 
-17:    
-18:   console.log(`✅ SimpleNFT déployé à: ${simpleNFT.address}`); 
-19:   console.log(`   • Name: ${await simpleNFT.name()}`); 
-20:   console.log(`   • Symbol: ${await simpleNFT.symbol()}`); 
-21:    
-22:   return simpleNFT.address; 
-23: } 
-24: // Exécuter directement 
-25: main() 
-26:   .then(() => process.exit(0)) 
-27:   .catch((error) => { 
-28:     console.error(error); 
-29:     process.exit(1); 
-30:   }); 
------------------------------------------------------------------------------- 
- 
-SCRIPT !script_count! | !filepath! 
-Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
------------------------------------------------------------------------------- 
 1: // scripts/deploy.js - Version CommonJS 
 2: const hre = require("hardhat"); 
 3: async function main() { 
-4:   console.log("🚀 Déploiement SimpleNFT (ESM)..."); 
+4:   console.log("🚀 Déploiement SimpleNFT..."); 
 5:    
 6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
 7:   const simpleNFT = await SimpleNFT.deploy( 
@@ -248,194 +213,11 @@ Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified!
 16:   console.log(`✅ SimpleNFT déployé à: ${address}`); 
 17:   console.log(` • Name: ${await simpleNFT.name()}`); 
 18:   console.log(` • Symbol: ${await simpleNFT.symbol()}`); 
-19:    
-20:   // Vérification Etherscan (uniquement pour réseaux réels) 
-21:   if (hre.network.name == "localhost") { 
-22:     console.log("\n⏳ Attente de 30s avant vérification..."); 
-23:     await new Promise(resolve => setTimeout(resolve, 30000)); 
-24:      
-25:     try { 
-26:       await hre.run("verify:verify", { 
-27:         address: address, 
-28:         constructorArguments: [ 
-29:           "Simple NFT", 
-30:           "SNFT", 
-31:           "https://api.nftmarketplace.com/metadata/" 
-32:         ] 
-33:       }); 
-34:       console.log("✅ Contrat vérifié sur Etherscan"); 
-35:     } catch (error) { 
-36:       if (error.message.includes("Already Verified")) { 
-37:         console.log("ℹ️  Contrat déjà vérifié"); 
-38:       } else { 
-39:         console.log("⚠️  Échec vérification:", error.message); 
-40:       } 
-41:     } 
-42:   } 
-43:    
-44:   return address; 
-45: } 
-46: main().catch((error) => { 
-47:   console.error("💥 ERREUR:", error); 
-48:   process.exitCode = 1; 
-49: }); 
------------------------------------------------------------------------------- 
- 
-SCRIPT !script_count! | !filepath! 
-Size: !filesize! bytes | Type: !fileext! | Modified: !filemodified! 
------------------------------------------------------------------------------- 
-1: const hre = require("hardhat"); 
-2: async function main() { 
-3:   console.log("🚀 Déploiement du contrat SimpleNFT..."); 
-4:    
-5:   // Récupérer le contrat 
-6:   const SimpleNFT = await hre.ethers.getContractFactory("SimpleNFT"); 
-7:    
-8:   // Déployer avec paramètres 
-9:   const simpleNFT = await SimpleNFT.deploy( 
-10:     "Simple NFT",          // name 
-11:     "SNFT",                // symbol 
-12:     "https://api.nftmarketplace.com/metadata/"  // baseURI 
-13:   ); 
-14:    
-15:   // Attendre le déploiement 
-16:   await simpleNFT.waitForDeployment(); 
-17:    
-18:   // Adresse du contrat déployé 
-19:   const address = await simpleNFT.getAddress(); 
-20:   console.log(`✅ SimpleNFT déployé à: ${address}`); 
-21:    
-22:   // Informations supplémentaires 
-23:   console.log(`   • Name: ${await simpleNFT.name()}`); 
-24:   console.log(`   • Symbol: ${await simpleNFT.symbol()}`); 
-25:   console.log(`   • Base URI: ${await simpleNFT.baseURI()}`); 
-26:   console.log(`   • Owner: ${await simpleNFT.owner()}`); 
-27:    
-28:   // Vérification sur Etherscan (UNIQUEMENT pour les réseaux réels) 
-29:   if (hre.network.name == "hardhat") { 
-30:     console.log(`\n🔍 Vérification sur Etherscan (${hre.network.name})...`); 
-31:      
-32:     // Attendre quelques blocs pour que la transaction soit indexée 
-33:     console.log("   Attente de 30 secondes pour l'indexation..."); 
-34:     await new Promise(resolve => setTimeout(resolve, 30000)); 
-35:      
-36:     try { 
-37:       await hre.run("verify:verify", { 
-38:         address: address, 
-39:         constructorArguments: [ 
-40:           "Simple NFT", 
-41:           "SNFT", 
-42:           "https://api.nftmarketplace.com/metadata/" 
-43:         ] 
-44:       }); 
-45:       console.log("✅ Contrat vérifié sur Etherscan"); 
-46:     } catch (error) { 
-47:       if (error.message.includes("Already Verified")) { 
-48:         console.log("✅ Contrat déjà vérifié"); 
-49:       } else { 
-50:         console.log("⚠️  Échec vérification:", error.message); 
-51:       } 
-52:     } 
-53:   } 
-54:    
-55:   return address; 
-56: } 
-57: // Fonction pour déployer sur différents réseaux 
-58: async function deployToNetwork(networkName) { 
-59:   console.log(`\n🌐 Déploiement sur ${networkName}...`); 
-60:    
-61:   // Sauvegarder le réseau actuel 
-62:   const originalNetwork = hre.network.name; 
-63:    
-64:   try { 
-65:     // Changer de réseau 
-66:     hre.changeNetwork(networkName); 
-67:      
-68:     // Déployer 
-69:     const address = await main(); 
-70:      
-71:     // Sauvegarder l'adresse dans un fichier 
-72:     const fs = require("fs"); 
-73:     const deploymentsDir = "./deployments"; 
-74:      
-75:     // CORRECTION : Créer le dossier seulement s'il n'existe pas 
-76:     if (fs.existsSync(deploymentsDir)) { 
-77:       fs.mkdirSync(deploymentsDir, { recursive: true }); 
-78:     } 
-79:      
-80:     const deploymentInfo = { 
-81:       network: networkName, 
-82:       contract: "SimpleNFT", 
-83:       address: address, 
-84:       timestamp: new Date().toISOString(), 
-85:       deployer: (await hre.ethers.getSigners())[0].address 
-86:     }; 
-87:      
-88:     fs.writeFileSync( 
-89:       `${deploymentsDir}/${networkName}.json`, 
-90:       JSON.stringify(deploymentInfo, null, 2) 
-91:     ); 
-92:      
-93:     console.log(`💾 Informations sauvegardées: deployments/${networkName}.json`); 
-94:      
-95:     return address; 
-96:      
-97:   } catch (error) { 
-98:     console.error(`❌ Erreur déploiement sur ${networkName}:`, error.message); 
-99:     throw error; 
-100:   } finally { 
-101:     // Restaurer le réseau original 
-102:     hre.changeNetwork(originalNetwork); 
-103:   } 
-104: } 
-105: // Script principal 
-106: async function runDeployments() { 
-107:   console.log("=".repeat(60)); 
-108:   console.log("        SCRIPT DE DÉPLOIEMENT NFT MARKETPLACE"); 
-109:   console.log("=".repeat(60)); 
-110:    
-111:   const args = process.argv.slice(2); 
-112:   const network = args[0] || "hardhat"; 
-113:    
-114:   try { 
-115:     if (network === "all") { 
-116:       // Déployer sur tous les réseaux configurés 
-117:       const networks = ["hardhat", "sepolia", "mumbai"]; 
-118:        
-119:       for (const net of networks) { 
-120:         try { 
-121:           await deployToNetwork(net); 
-122:         } catch (error) { 
-123:           console.log(`⚠️  Skip ${net} due to error: ${error.message}`); 
-124:         } 
-125:       } 
-126:        
-127:     } else { 
-128:       // Déployer sur un réseau spécifique 
-129:       await deployToNetwork(network); 
-130:     } 
-131:      
-132:     console.log("\n🎉 Déploiement terminé avec succès"); 
-133:      
-134:   } catch (error) { 
-135:     console.error("\n❌ Erreur pendant le déploiement:", error); 
-136:     process.exit(1); 
-137:   } 
-138: } 
-139: // Exécuter si appelé directement 
-140: if (require.main === module) { 
-141:   runDeployments() 
-142:     .then(() => process.exit(0)) 
-143:     .catch((error) => { 
-144:       console.error(error); 
-145:       process.exit(1); 
-146:     }); 
-147: } 
-148: // Exporter pour usage dans d'autres scripts 
-149: module.exports = { 
-150:   main, 
-151:   deployToNetwork 
-152: }; 
+19: } 
+20: main().catch((error) => { 
+21:   console.error("💥 ERREUR:", error); 
+22:   process.exitCode = 1; 
+23: }); 
 ------------------------------------------------------------------------------ 
  
 SCRIPT !script_count! | !filepath! 
@@ -1402,9 +1184,7 @@ D:\Web3Projects\devPipline\contracts\SimpleTest.sol
 SCRIPTS: 
 D:\Web3Projects\devPipline\scripts\Activate.ps1
 D:\Web3Projects\devPipline\scripts\check_env.py
-D:\Web3Projects\devPipline\scripts\deploy-simple.js
 D:\Web3Projects\devPipline\scripts\deploy.js
-D:\Web3Projects\devPipline\scripts\deploy_OLD_v5.js
 D:\Web3Projects\devPipline\scripts\venv
 D:\Web3Projects\devPipline\scripts\venv\Include
 D:\Web3Projects\devPipline\scripts\venv\Lib
@@ -3119,9 +2899,9 @@ tsconfig.json
 [SUMMARY] 
 ============================================================================== 
 Total contract files: 3 
-Total script files: 12 
+Total script files: 10 
 Total test files: 0 
-Total code files: 15 
+Total code files: 13 
  
-Generated: 14/01/2026 14:47:01,13 
+Generated: 14/01/2026 15:01:50,81 
 ============================================================================== 
